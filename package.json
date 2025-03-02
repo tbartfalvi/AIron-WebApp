@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@carbon/icons-react": "^11.56.0",
+    "@carbon/react": "^1.77.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "name": "airon-webapp",
+  "version": "1.0.0",
+  "description": "The front end for the AIron web app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbartfalvi/AIron-WebApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tbartfalvi/AIron-WebApp/issues"
+  },
+  "homepage": "https://github.com/tbartfalvi/AIron-WebApp#readme"
+}
