@@ -1,0 +1,101 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #161616;
+}
+
+.auth-grid {
+  margin: 0;
+  height: calc(100vh - 3rem);
+}
+
+.auth-form-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 3rem);
+  margin: 0 auto;
+}
+
+.auth-form-wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.auth-subtitle {
+  font-size: 1rem;
+  color: #c6c6c6;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.auth-input {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Add extra space after password input */
+#password-wrapper {
+  margin-bottom: 2rem !important;
+}
+
+.auth-submit-button {
+  width: 100%;
+  margin-top: 1.5rem;
+  min-height: 3rem;
+}
+
+/* Custom green button styling */
+.green-button {
+  background-color: #24a148 !important;
+}
+
+.green-button:hover {
+  background-color: #0e8c3a !important;
+}
+
+.auth-toggle {
+  margin-top: 2rem;
+  text-align: center;
+  color: #c6c6c6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-toggle p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.auth-toggle-button {
+  color: #24a148 !important;
+  padding: 0 0.5rem !important;
+  min-height: 24px !important;
+  height: auto !important;
+  margin-left: 0.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.auth-error {
+  margin-bottom: 1.5rem;
+}
+
+#confirmPassword-wrapper {
+  margin-bottom: 2rem !important;
+}
