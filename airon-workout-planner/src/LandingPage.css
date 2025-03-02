@@ -119,6 +119,81 @@
   background-color: #0e8c3a !important;
 }
 
+/* Change the selection banner color to green */
+.cds--batch-actions {
+  background-color: #24a148 !important;
+}
+
+.cds--batch-actions:hover, 
+.cds--batch-actions:focus {
+  background-color: #0e8c3a !important;
+}
+
+/* The blue "items selected" section */
+.cds--batch-summary {
+  color: white !important;
+  background-color: #24a148 !important;
+}
+
+/* Ensure the whole batch action bar is green */
+.cds--batch-actions:before {
+  background-color: #24a148 !important;
+}
+
+.cds--batch-summary__para {
+  color: white !important;
+}
+
+.cds--btn--primary.cds--batch-summary__cancel {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+/* Table action buttons */
+.cds--batch-actions .cds--btn--primary {
+  background-color: #24a148 !important;
+  border-color: #24a148 !important;
+  color: white !important;
+}
+
+.cds--batch-actions .cds--btn--primary:hover {
+  background-color: #0e8c3a !important;
+  border-color: #0e8c3a !important;
+}
+
+/* Ghost buttons in the batch actions */
+.cds--batch-actions .cds--btn--ghost {
+  color: white !important;
+  border-color: white !important;
+}
+
+.cds--batch-actions .cds--btn--ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Specifically target the Download and Delete buttons */
+.cds--batch-actions .cds--action-list .cds--btn {
+  background-color: #24a148 !important;
+  border-color: #24a148 !important;
+  color: white !important;
+}
+
+.cds--batch-actions .cds--action-list .cds--btn:hover {
+  background-color: #0e8c3a !important;
+  border-color: #0e8c3a !important;
+}
+
+/* Cancel button */
+.cds--batch-actions .cds--action-list .cds--btn--ghost {
+  background-color: transparent !important;
+  color: white !important;
+  border-color: white !important;
+}
+
+.cds--batch-actions .cds--action-list .cds--btn--ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Empty state styles */
 .empty-state {
   display: flex;
