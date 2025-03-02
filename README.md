@@ -107,12 +107,3 @@ airon-workout-planner/
    ```
 
 5. **Create a pull request** on GitHub to merge your changes
-
-## Contributors
-
-- Your Name
-- Other Contributors
-
-## License
-
-This project is for educational purposes only.
