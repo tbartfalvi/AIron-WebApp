@@ -1,0 +1,180 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f4f4;
+}
+
+.landing-header {
+  background-color: #0f0f0f;
+  border-bottom: 1px solid #393939;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.landing-content {
+  flex: 1;
+  background-color: #f4f4f4;
+  padding: 2rem;
+}
+
+/* Header buttons */
+.header-button {
+  height: 100%;
+  color: white !important;
+  padding: 0 1rem !important;
+}
+
+.header-button:hover {
+  background-color: #393939 !important;
+}
+
+/* Create Program Dropdown */
+.create-program-wrapper {
+  position: relative;
+}
+
+.create-program-button {
+  display: flex !important;
+  align-items: center;
+  background-color: #24a148 !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 0 1rem !important;
+  margin-right: 1rem;
+  height: 3rem !important;
+  min-width: fit-content;
+  width: auto !important;
+}
+
+.create-program-button:hover {
+  background-color: #0e8c3a !important;
+}
+
+.create-program-button span {
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.program-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #262626;
+  border: 1px solid #393939;
+  border-radius: 4px;
+  width: 200px;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.program-dropdown button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.program-dropdown button:hover {
+  background-color: #393939;
+}
+
+.program-dropdown button svg {
+  margin-right: 0.75rem;
+  color: #24a148;
+}
+
+/* Programs Table Styles */
+.programs-table-container {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.programs-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 1.5rem 1rem 0.5rem 1rem;
+  color: #161616;
+}
+
+.create-program-table-button {
+  background-color: #24a148 !important;
+}
+
+.create-program-table-button:hover {
+  background-color: #0e8c3a !important;
+}
+
+/* Empty state styles */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 8rem);
+  text-align: center;
+  color: #525252;
+  background-color: white;
+  border-radius: 8px;
+  padding: 3rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state h2 {
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: #161616;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.create-first-program {
+  background-color: #24a148 !important;
+}
+
+.create-first-program:hover {
+  background-color: #0e8c3a !important;
+}
+
+/* About modal styles */
+.about-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #161616;
+}
+
+/* Make the modal's close button green */
+.green-modal-button {
+  background-color: #24a148 !important;
+}
+
+.green-modal-button:hover {
+  background-color: #0e8c3a !important;
+}
+
+/* Override Carbon's modal styling to change button color */
+.cds--modal-footer .cds--btn--primary {
+  background-color: #24a148;
+}
+
+.cds--modal-footer .cds--btn--primary:hover {
+  background-color: #0e8c3a;
+}
