@@ -9,13 +9,22 @@ import {
   Button,
   Stack,
   Tile,
+  DatePicker,
+  DatePickerInput,
+  RadioButtonGroup,
+  RadioButton,
 } from '@carbon/react';
 import { ArrowRight, Close } from '@carbon/icons-react';
 import './ProgramForms.css';
 
 const PowerliftingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
+    startDate: new Date(),
     currentWeight: '',
+    weightUnit: 'lb', // Default to pounds
+    benchPress1RM: '',
+    squat1RM: '',
+    deadlift1RM: '',
     workoutsPerWeek: 3,
     timePerWorkout: 60,
     goals: '',
@@ -25,6 +34,14 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleDateChange = (dates) => {
+    const [date] = dates;
+    setFormData({
+      ...formData,
+      startDate: date,
     });
   };
 
@@ -44,9 +61,27 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
         <Form onSubmit={handleSubmit}>
           <Grid>
             <Column lg={8} md={4} sm={4}>
+              <DatePicker
+                datePickerType="single"
+                dateFormat="m/d/Y"
+                onChange={handleDateChange}
+                value={formData.startDate}
+              >
+                <DatePickerInput
+                  id="startDate"
+                  labelText="What date do you want to start the Program?"
+                  placeholder="mm/dd/yyyy"
+                  size="md"
+                  className="form-input"
+                  required
+                />
+              </DatePicker>
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="currentWeight"
-                label="Current Weight (lbs)"
+                label="Current Weight"
                 min={1}
                 value={formData.currentWeight}
                 onChange={e => handleChange('currentWeight', e.target.value)}
@@ -56,9 +91,72 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
             </Column>
 
             <Column lg={8} md={4} sm={4}>
+              <div className="form-input">
+                <p className="input-label">Do you track your weights in kilograms or pounds?</p>
+                <RadioButtonGroup
+                  name="weightUnit"
+                  valueSelected={formData.weightUnit}
+                  onChange={value => handleChange('weightUnit', value)}
+                  orientation="horizontal"
+                >
+                  <RadioButton
+                    id="kg"
+                    labelText="Kilograms (kg)"
+                    value="kg"
+                  />
+                  <RadioButton
+                    id="lb"
+                    labelText="Pounds (lb)"
+                    value="lb"
+                  />
+                </RadioButtonGroup>
+              </div>
+            </Column>
+
+            <Column lg={16} md={8} sm={4}>
+              <p className="form-section-title">What are your 1RM's for the following lifts?</p>
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="benchPress1RM"
+                label="Bench Press"
+                min={1}
+                value={formData.benchPress1RM}
+                onChange={e => handleChange('benchPress1RM', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="squat1RM"
+                label="Squat"
+                min={1}
+                value={formData.squat1RM}
+                onChange={e => handleChange('squat1RM', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="deadlift1RM"
+                label="Deadlift"
+                min={1}
+                value={formData.deadlift1RM}
+                onChange={e => handleChange('deadlift1RM', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+            <Column lg={8} md={4} sm={4}></Column>
+            <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="workoutsPerWeek"
-                label="Workouts Per Week"
+                label="Frequency Per Week"
                 min={1}
                 max={7}
                 value={formData.workoutsPerWeek}
@@ -71,7 +169,7 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
             <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="timePerWorkout"
-                label="Minutes Per Workout"
+                label="Time in Gym Per Workout (minutes)"
                 min={15}
                 max={240}
                 step={15}

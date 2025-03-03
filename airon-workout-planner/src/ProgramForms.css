@@ -5,28 +5,48 @@
 }
 
 .program-form-tile {
-  background-color: white;
+  background-color: #262626; /* Dark background for the tile */
   border-radius: 8px;
   padding: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .form-title {
   font-size: 1.75rem;
   font-weight: 400;
   margin-bottom: 0.75rem;
-  color: #161616;
+  color: #f4f4f4; /* Light text color for title */
 }
 
 .form-description {
   font-size: 1rem;
-  color: #525252;
+  color: #c6c6c6; /* Light gray for description text */
   margin-bottom: 2rem;
   max-width: 800px;
 }
 
+.form-section-title {
+  color: #f4f4f4; /* Light text color for section titles */
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  color: #f4f4f4; /* Light text color for input labels */
+}
+
 .form-input {
   margin-bottom: 1.5rem;
+}
+
+/* Make sure form labels are visible against dark background */
+.form-input label {
+  color: #f4f4f4;
+}
+
+/* Style for placeholder text in textareas */
+.form-input textarea::placeholder {
+  color: #6f6f6f;
 }
 
 .form-buttons {
@@ -41,4 +61,42 @@
 
 .create-program-form-button:hover {
   background-color: #0e8c3a !important;
+}
+
+/* Adjust dropdown colors for dark theme */
+.bx--list-box__menu {
+  background-color: #333333;
+}
+
+.bx--list-box__menu-item {
+  color: #f4f4f4;
+}
+
+.bx--list-box__menu-item:hover {
+  background-color: #4c4c4c;
+}
+
+/* Style for date picker and other inputs to match dark theme */
+.bx--date-picker__input {
+  background-color: #333333;
+  color: #f4f4f4;
+}
+
+/* Add a subtle border to form elements */
+.bx--number input[type="number"],
+.bx--text-area,
+.bx--dropdown,
+.bx--date-picker__input {
+  border: 1px solid #565656;
+}
+
+/* Add styles for the selected button state */
+.bx--btn--primary {
+  background-color: #0e8a00 !important;
+  border-color: #0e8a00 !important;
+}
+
+/* Add some breathing room between form sections */
+.bx--grid {
+  row-gap: 0.5rem;
 }
