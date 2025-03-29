@@ -265,13 +265,11 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 className="form-input"
               />
             </Column>
-
             <Column lg={16} md={8} sm={4} className="form-buttons">
-              <Stack orientation="horizontal" gap={6}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Button
                   kind="secondary"
                   onClick={onCancel}
-                  renderIcon={Close}
                 >
                   Cancel
                 </Button>
@@ -279,10 +277,11 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                   type="submit"
                   className="create-program-form-button"
                   renderIcon={ArrowRight}
+                  style={{ marginLeft: '1rem' }}
                 >
                   Create program
                 </Button>
-              </Stack>
+              </div>
             </Column>
           </Grid>
         </Form>

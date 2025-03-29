@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Content,
   Header,
@@ -10,8 +10,9 @@ import {
   TextInput,
   Button,
   InlineNotification,
+  Tile,
 } from '@carbon/react';
-import { ArrowRight, Login } from '@carbon/icons-react';
+import { ArrowRight, Login, FitToScreen, View } from '@carbon/icons-react';
 import './AuthPage.css';
 
 const AuthPage = ({ onLogin }) => {
@@ -23,6 +24,17 @@ const AuthPage = ({ onLogin }) => {
     name: '',
   });
   const [error, setError] = useState('');
+  const [backgroundImage, setBackgroundImage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Rotate through background images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBackgroundImage((prev) => (prev >= 9 ? 1 : prev + 1));
+    }, 5000); // Change image every 5 seconds
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -50,106 +62,150 @@ const AuthPage = ({ onLogin }) => {
       return;
     }
 
+    // Show loading state
+    setIsLoading(true);
+
     // Mock login/signup success
     // In a real app, you would call an API here
     setTimeout(() => {
+      setIsLoading(false);
       onLogin({ email: formData.email, name: formData.name || 'User' });
-    }, 1000);
+    }, 1500);
   };
 
   return (
     <Theme theme="g100">
       <div className="auth-container">
-        <Header aria-label="AIron Workout Planner">
-          <HeaderName prefix="">AIron Workout Planner</HeaderName>
+        <Header aria-label="AIron Workout Planner" className="auth-header">
+          <HeaderName prefix="">
+            <span className="auth-logo-text">AIron</span> Workout Planner
+          </HeaderName>
         </Header>
-        <Content>
-          <Grid className="auth-grid">
-            <Column lg={16} md={8} sm={4} className="auth-form-container">
-              <div className="auth-form-wrapper">
-                <h1 className="auth-title">{isLogin ? 'Welcome back' : 'Create an account'}</h1>
-                <p className="auth-subtitle">
-                  {isLogin
-                    ? 'Sign in to access your workout programs or Create a new program'
-                    : 'Join AIron Workout Planner to create personalized workout programs'}
-                </p>
-                
-                {error && (
-                  <InlineNotification
-                    kind="error"
-                    title="Error"
-                    subtitle={error}
-                    hideCloseButton
-                    className="auth-error"
-                  />
-                )}
-                
-                <Form onSubmit={handleSubmit}>
-                  {!isLogin && (
-                    <TextInput
-                      id="name"
-                      labelText="Full name"
-                      placeholder="Enter your full name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="auth-input"
+        
+        <div className="auth-content-wrapper">
+          <div 
+            className="auth-image-section"
+            style={{ backgroundImage: `url(/images/im${backgroundImage}.jpg)` }}
+          >
+            <div className="image-overlay"></div>
+            <div className="image-content">
+              <h2 className="image-title">Transform Your Fitness Journey</h2>
+              <p className="image-description">
+                Personalized workout programs designed to help you reach your fitness goals. Trusted by The University of Arizona Powerlifting Team.
+              </p>
+              <div className="image-features">
+                <div className="feature">
+                  <FitToScreen size={24} />
+                  <span>Custom Programs</span>
+                </div>
+                <div className="feature">
+                  <View size={24} />
+                  <span>Progress Tracking</span>
+                </div>
+              </div>
+            </div>
+            <div className="image-indicators">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <div 
+                  key={num} 
+                  className={`indicator ${backgroundImage === num ? 'active' : ''}`}
+                  onClick={() => setBackgroundImage(num)}
+                ></div>
+              ))}
+            </div>
+          </div>
+          
+          <Content className="auth-form-section">
+            <div className="auth-form-container">
+              <Tile className="auth-form-tile">
+                <div className="auth-form-wrapper">
+                  <h1 className="auth-title">{isLogin ? 'Welcome back' : 'Create an account'}</h1>
+                  <p className="auth-subtitle">
+                    {isLogin
+                      ? 'Sign in to access your workout programs'
+                      : 'Join AIron Workout Planner to create personalized programs'}
+                  </p>
+                  
+                  {error && (
+                    <InlineNotification
+                      kind="error"
+                      title="Error"
+                      subtitle={error}
+                      hideCloseButton
+                      className="auth-error"
                     />
                   )}
                   
-                  <TextInput
-                    id="email"
-                    labelText="Email"
-                    placeholder="Enter your email address"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="auth-input"
-                    required
-                  />
-                  
-                  <div id="password-wrapper">
-                    <TextInput.PasswordInput
-                      id="password"
-                      labelText="Password"
-                      placeholder="Enter your password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="auth-input"
-                      required
-                    />
-                  </div>
-                  <div id="confirmPassword-wrapper">
+                  <Form onSubmit={handleSubmit}>
                     {!isLogin && (
-                      <TextInput.PasswordInput
-                        id="confirmPassword"
-                        labelText="Confirm password"
-                        placeholder="Confirm your password"
-                        value={formData.confirmPassword}
+                      <TextInput
+                        id="name"
+                        labelText="Full name"
+                        placeholder="Enter your full name"
+                        value={formData.name}
                         onChange={handleChange}
                         className="auth-input"
                       />
                     )}
-                  </div>
-                  <Button
-                    type="submit"
-                    className="auth-submit-button green-button"
-                    renderIcon={isLogin ? Login : ArrowRight}
-                  >
-                    {isLogin ? 'Log in' : 'Create account'}
-                  </Button>
-                </Form>
-                
-                <div className="auth-toggle">
-                  <p>
-                    {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <Button kind="ghost" onClick={toggleForm} className="auth-toggle-button">
-                      {isLogin ? 'Create an account' : 'Log in'}
+                    
+                    <TextInput
+                      id="email"
+                      labelText="Email"
+                      placeholder="Enter your email address"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="auth-input"
+                      required
+                    />
+                    
+                    <div id="password-wrapper">
+                      <TextInput.PasswordInput
+                        id="password"
+                        labelText="Password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="auth-input"
+                        required
+                      />
+                    </div>
+                    
+                    <div id="confirmPassword-wrapper" className={isLogin ? 'hidden' : ''}>
+                      {!isLogin && (
+                        <TextInput.PasswordInput
+                          id="confirmPassword"
+                          labelText="Confirm password"
+                          placeholder="Confirm your password"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                          className="auth-input"
+                        />
+                      )}
+                    </div>
+                    
+                    <Button
+                      type="submit"
+                      className={`auth-submit-button green-button ${isLoading ? 'loading' : ''}`}
+                      renderIcon={isLogin ? Login : ArrowRight}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Processing...' : isLogin ? 'Log in' : 'Create account'}
                     </Button>
-                  </p>
+                  </Form>
+                  
+                  <div className="auth-toggle">
+                    <p>
+                      {isLogin ? "Don't have an account?" : "Already have an account?"}
+                      <Button kind="ghost" onClick={toggleForm} className="auth-toggle-button">
+                        {isLogin ? 'Create an account' : 'Log in'}
+                      </Button>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Column>
-          </Grid>
-        </Content>
+              </Tile>
+            </div>
+          </Content>
+        </div>
       </div>
     </Theme>
   );

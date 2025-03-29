@@ -1,3 +1,5 @@
+
+
 .program-form-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -49,18 +51,40 @@
   color: #6f6f6f;
 }
 
+/* Updated button styles */
 .form-buttons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  width: 100%;
 }
 
+/* Style for the cancel button */
+.form-buttons .cds--btn--secondary,
+.form-buttons .bx--btn--secondary {
+  background-color: #393939 !important;
+  color: #f4f4f4 !important;
+  margin-right: 1rem;
+  border-color: #393939 !important;
+}
+
+.form-buttons .cds--btn--secondary:hover,
+.form-buttons .bx--btn--secondary:hover {
+  background-color: #4c4c4c !important;
+}
+
+/* Style for the create program button */
 .create-program-form-button {
   background-color: #24a148 !important;
 }
 
 .create-program-form-button:hover {
   background-color: #0e8c3a !important;
+}
+
+/* Move the icon inside the button to the right */
+.create-program-form-button svg {
+  margin-left: 0.5rem;
 }
 
 /* Adjust dropdown colors for dark theme */
@@ -100,3 +124,4 @@
 .bx--grid {
   row-gap: 0.5rem;
 }
+
