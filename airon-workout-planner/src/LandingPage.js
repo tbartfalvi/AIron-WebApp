@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Header,
   HeaderName,
@@ -25,6 +25,7 @@ import {
   TableBatchActions,
   TableBatchAction,
   Modal,
+  InlineLoading,
 } from '@carbon/react';
 import { 
   AddFilled, 
@@ -41,34 +42,76 @@ import './LandingPage.css';
 import PowerliftingForm from './PowerliftingForm';
 import BodyBuildingForm from './BodyBuildingForm';
 import WeightLossForm from './WeightLossForm';
+import apiService from './apiService';
 
 const LandingPage = ({ user, onLogout }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState(null);
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
-  // Sample workout program data
-  const programData = [
-    {
-      id: '1',
-      name: 'Summer Strength Program',
-      dateCreated: 'February 20, 2025',
-      type: 'Powerlifting'
-    },
-    {
-      id: '2',
-      name: 'Weight Loss Circuit',
-      dateCreated: 'February 25, 2025',
-      type: 'Weight Loss'
-    },
-    {
-      id: '3',
-      name: 'Hypertrophy Focus',
-      dateCreated: 'February 28, 2025',
-      type: 'Body Building'
+  // Fetch user's programs on component mount
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
+  
+  const fetchPrograms = async () => {
+    try {
+      setLoading(true);
+      const userPrograms = await apiService.getPrograms(user.id);
+      
+      // Transform the programs data to match the expected format
+      const formattedPrograms = userPrograms.map(program => ({
+        id: program.id,
+        name: program.name,
+        dateCreated: new Date(program.created_on).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
+        type: getProgramTypeName(program.type)
+      }));
+      
+      setPrograms(formattedPrograms);
+      setError('');
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+      setError('Failed to load programs');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+  
+  // Helper function to convert program type from enum string to readable string
+  const getProgramTypeName = (typeEnum) => {
+    switch(typeEnum) {
+      case "ScheduleType.BODY_BUILDING":
+        return "Body Building";
+      case "ScheduleType.POWER_LIFTING":
+        return "Powerlifting";
+      case "ScheduleType.WEIGHT_LOSS":
+        return "Weight Loss";
+      default:
+        return "Unknown";
+    }
+  };
+  
+  // Map program type to enum value
+  const getProgramTypeEnum = (type) => {
+    switch(type) {
+      case "bodybuilding":
+        return 1; // BODY_BUILDING
+      case "powerlifting":
+        return 2; // POWER_LIFTING
+      case "weightloss":
+        return 3; // WEIGHT_LOSS
+      default:
+        return 1;
+    }
+  };
 
   const handleCreateClick = () => {
     setIsCreateOpen(!isCreateOpen);
@@ -89,12 +132,13 @@ const LandingPage = ({ user, onLogout }) => {
 
   const handleDownloadProgram = () => {
     console.log('Downloading selected programs:', selectedRows);
-    // In a real app, this would trigger a CSV download
+    // In a real app, you would implement the download functionality here
   };
 
   const handleDeleteProgram = () => {
     console.log('Deleting selected programs:', selectedRows);
-    // In a real app, this would delete the selected programs
+    // Note: Backend API does not support deleting programs yet
+    // This would need to be implemented
   };
 
   const handleLogout = () => {
@@ -109,10 +153,33 @@ const LandingPage = ({ user, onLogout }) => {
     setCurrentForm(null);
   };
 
-  const handleFormSubmit = (formData) => {
-    console.log('Form submitted with data:', formData, 'for program type:', currentForm);
-    // In a real app, you would save this data to create a program
-    setCurrentForm(null);
+  const handleFormSubmit = async (formData) => {
+    try {
+      setLoading(true);
+      const programType = getProgramTypeEnum(currentForm);
+      const programName = `${currentForm.charAt(0).toUpperCase() + currentForm.slice(1)} Program`;
+      
+      const result = await apiService.createProgram(
+        user.id,
+        programName,
+        programType,
+        formData
+      );
+      
+      if (result === "True") {
+        // Refresh programs list
+        await fetchPrograms();
+        setCurrentForm(null);
+      } else {
+        console.error("Failed to create program");
+        setError('Failed to create program');
+      }
+    } catch (error) {
+      console.error("Error creating program:", error);
+      setError('Failed to create program: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Render the appropriate form based on the selected program type
@@ -143,6 +210,9 @@ const LandingPage = ({ user, onLogout }) => {
         return null;
     }
   };
+
+  // Use fetched programs if available, otherwise use sample data
+  const programData = programs.length > 0 ? programs : [];
 
   return (
     <Theme theme="g100">
@@ -204,9 +274,19 @@ const LandingPage = ({ user, onLogout }) => {
           ) : (
             <Grid>
               <Column lg={16} md={8} sm={4}>
-                {programData.length > 0 ? (
+                {loading ? (
+                  <div className="loading-container">
+                    <InlineLoading 
+                      description="Loading programs..." 
+                      status="active" 
+                      className="programs-loading"
+                    />
+                  </div>
+                ) : programData.length > 0 ? (
                   <div className="programs-table-container">
                     <h2 className="programs-title">{user.name}'s Workout Programs</h2>
+                    
+                    {error && <div className="error-message">{error}</div>}
                     
                     <DataTable 
                       rows={programData}
@@ -257,7 +337,7 @@ const LandingPage = ({ user, onLogout }) => {
                               <TableRow>
                                 <TableSelectAll {...getSelectionProps()} />
                                 {headers.map(header => (
-                                  <TableHeader {...getHeaderProps({ header })}>
+                                  <TableHeader {...getHeaderProps({ header })} key={header.key}>
                                     {header.header}
                                   </TableHeader>
                                 ))}
@@ -265,7 +345,7 @@ const LandingPage = ({ user, onLogout }) => {
                             </TableHead>
                             <TableBody>
                               {rows.map(row => (
-                                <TableRow {...getRowProps({ row })}>
+                                <TableRow {...getRowProps({ row })} key={row.id}>
                                   <TableSelectRow {...getSelectionProps({ row })} />
                                   {row.cells.map(cell => (
                                     <TableCell key={cell.id}>{cell.value}</TableCell>

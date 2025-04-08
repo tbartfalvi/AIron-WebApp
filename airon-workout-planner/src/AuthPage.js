@@ -14,6 +14,7 @@ import {
 } from '@carbon/react';
 import { ArrowRight, Login, FitToScreen, View } from '@carbon/icons-react';
 import './AuthPage.css';
+import apiService from './apiService';
 
 const AuthPage = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -48,7 +49,7 @@ const AuthPage = ({ onLogin }) => {
     setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
@@ -65,12 +66,31 @@ const AuthPage = ({ onLogin }) => {
     // Show loading state
     setIsLoading(true);
 
-    // Mock login/signup success
-    // In a real app, you would call an API here
-    setTimeout(() => {
+    try {
+      if (isLogin) {
+        // Handle login
+        const userId = await apiService.login(formData.email, formData.password);
+        if (userId) {
+          const userData = await apiService.getUserInfo(userId);
+          onLogin({ id: userId, email: userData.email, name: userData.full_name });
+        } else {
+          setError('Invalid email or password');
+        }
+      } else {
+        // Handle registration
+        const userId = await apiService.register(formData.name, formData.email, formData.password);
+        if (userId) {
+          // Auto login after registration
+          onLogin({ id: userId, email: formData.email, name: formData.name });
+        } else {
+          setError('Registration failed');
+        }
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred');
+    } finally {
       setIsLoading(false);
-      onLogin({ email: formData.email, name: formData.name || 'User' });
-    }, 1500);
+    }
   };
 
   return (

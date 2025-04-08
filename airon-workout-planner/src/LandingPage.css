@@ -295,3 +295,37 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background-color: #262626;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.programs-loading {
+  font-size: 1.2rem;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #fa4d56;
+  color: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Add this to AuthPage.css for the loading state */
+.auth-submit-button.loading {
+  opacity: 0.8;
+}
+
+/* Style for hidden element */
+.hidden {
+  display: none;
+}
