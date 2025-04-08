@@ -8,9 +8,19 @@
   "name": "airon-webapp",
   "version": "1.0.0",
   "description": "The front end for the AIron web app.",
-  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "@carbon/icons-react": "^11.56.0",
+    "@carbon/react": "^1.77.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "repository": {
     "type": "git",
@@ -22,5 +32,20 @@
   "bugs": {
     "url": "https://github.com/tbartfalvi/AIron-WebApp/issues"
   },
-  "homepage": "https://github.com/tbartfalvi/AIron-WebApp#readme"
+  "homepage": ".",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "postcss-normalize": "^13.0.1"
+  }
 }
