@@ -13,7 +13,6 @@ import {
   RadioButtonGroup,
   RadioButton,
   ButtonSet,
-  Dropdown,
 } from '@carbon/react';
 import { ArrowRight } from '@carbon/icons-react';
 import './ProgramForms.css';
@@ -29,29 +28,8 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
     bodyFatPercentage: '',
     workoutsPerWeek: 4,
     timePerWorkout: 75,
-    trainingPreference: 'bodyPart',
-    muscleEmphasis: [],
     goals: '',
   });
-
-  // Training split options
-  const trainingSplitOptions = [
-    { id: 'bodyPart', text: 'Body Part Split' },
-    { id: 'pushPull', text: 'Push/Pull/Legs' },
-    { id: 'upperLower', text: 'Upper/Lower' },
-    { id: 'fullBody', text: 'Full Body' },
-    { id: 'arnold', text: 'Arnold Split' },
-  ];
-
-  // Muscle group emphasis options
-  const muscleGroupOptions = [
-    { id: 'chest', text: 'Chest' },
-    { id: 'back', text: 'Back' },
-    { id: 'shoulders', text: 'Shoulders' },
-    { id: 'arms', text: 'Arms' },
-    { id: 'legs', text: 'Legs' },
-    { id: 'core', text: 'Core' },
-  ];
 
   const handleChange = (name, value) => {
     setFormData({
@@ -77,14 +55,6 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
   const greenButtonStyle = {
     backgroundColor: '#0e8a00',
     borderColor: '#0e8a00',
-  };
-
-  // Handle muscle group selection changes
-  const handleMuscleChange = (selectedItems) => {
-    setFormData({
-      ...formData,
-      muscleEmphasis: selectedItems.selectedItems,
-    });
   };
 
   return (
@@ -249,41 +219,6 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 className="form-input"
                 required
                 hideSteppers
-              />
-            </Column>
-
-            <Column lg={8} md={4} sm={4}>
-              <Dropdown
-                id="trainingSplit"
-                titleText="Preferred Training Split"
-                label="Select a training split"
-                items={trainingSplitOptions}
-                itemToString={(item) => (item ? item.text : '')}
-                onChange={({ selectedItem }) => 
-                  handleChange('trainingPreference', selectedItem.id)
-                }
-                initialSelectedItem={
-                  trainingSplitOptions.find(
-                    (option) => option.id === formData.trainingPreference
-                  )
-                }
-                className="form-input"
-              />
-            </Column>
-
-            <Column lg={8} md={4} sm={4}>
-              <Dropdown
-                id="muscleEmphasis"
-                titleText="Muscle Groups to Emphasize"
-                label="Select muscle groups"
-                items={muscleGroupOptions}
-                itemToString={(item) => (item ? item.text : '')}
-                onChange={handleMuscleChange}
-                selectedItem={
-                  formData.muscleEmphasis.length > 0 ? formData.muscleEmphasis[0] : null
-                }
-                type="multiselect"
-                className="form-input"
               />
             </Column>
 
