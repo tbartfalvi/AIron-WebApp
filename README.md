@@ -42,6 +42,7 @@ Follow these steps to get the application running:
 
 If you encounter any issues:
 
+- **UNABLE_TO_GET_ISSUER_CERT_LOCALLY**: If running locally turn off strict ssl by running `npm config set strict-ssl false`
 - **"Missing script: start" error**: Make sure you're in the correct directory and that the package.json file exists
 - **Module not found errors**: Try running `npm install` again to ensure all dependencies are installed
 - **Port conflicts**: If port 3000 is already in use, React will ask to use a different port
