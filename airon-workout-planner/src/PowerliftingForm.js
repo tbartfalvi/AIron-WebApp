@@ -7,21 +7,20 @@ import {
   Grid,
   Column,
   Button,
-  Stack,
   Tile,
   DatePicker,
   DatePickerInput,
   RadioButtonGroup,
   RadioButton,
 } from '@carbon/react';
-import { ArrowRight, Close } from '@carbon/icons-react';
+import { ArrowRight } from '@carbon/icons-react';
 import './ProgramForms.css';
 
 const PowerliftingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     startDate: new Date(),
     currentWeight: '',
-    weightUnit: 'lb', // Default to pounds
+    weightUnit: 'lb',
     benchPress1RM: '',
     squat1RM: '',
     deadlift1RM: '',
@@ -87,6 +86,7 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('currentWeight', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -126,6 +126,7 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('benchPress1RM', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -138,6 +139,7 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('squat1RM', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -150,6 +152,7 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('deadlift1RM', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
             <Column lg={8} md={4} sm={4}></Column>
@@ -160,9 +163,10 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 min={1}
                 max={7}
                 value={formData.workoutsPerWeek}
-                onChange={e => handleChange('workoutsPerWeek', parseInt(e.target.value))}
+                onChange={e => handleChange('workoutsPerWeek', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -174,9 +178,10 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 max={240}
                 step={15}
                 value={formData.timePerWorkout}
-                onChange={e => handleChange('timePerWorkout', parseInt(e.target.value))}
+                onChange={e => handleChange('timePerWorkout', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 

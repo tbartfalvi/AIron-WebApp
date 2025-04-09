@@ -7,7 +7,6 @@ import {
   Grid,
   Column,
   Button,
-  Stack,
   Tile,
   DatePicker,
   DatePickerInput,
@@ -16,20 +15,20 @@ import {
   ButtonSet,
   Dropdown,
 } from '@carbon/react';
-import { ArrowRight, Close } from '@carbon/icons-react';
+import { ArrowRight } from '@carbon/icons-react';
 import './ProgramForms.css';
 
 const BodyBuildingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     startDate: new Date(),
     currentWeight: '',
-    weightUnit: 'lb', // Default to pounds
-    experienceLevel: 'intermediate', // Default to intermediate
+    weightUnit: 'lb',
+    experienceLevel: 'intermediate',
     bodyFatPercentage: '',
     workoutsPerWeek: 4,
     timePerWorkout: 75,
-    trainingPreference: 'bodyPart', // Default to body part split
-    muscleEmphasis: [], // Areas to emphasize
+    trainingPreference: 'bodyPart',
+    muscleEmphasis: [],
     goals: '',
   });
 
@@ -154,6 +153,7 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('currentWeight', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
             
@@ -166,6 +166,7 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 value={formData.bodyFatPercentage}
                 onChange={e => handleChange('bodyFatPercentage', e.target.value)}
                 className="form-input"
+                hideSteppers
               />
             </Column>
 
@@ -199,9 +200,10 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 min={1}
                 max={7}
                 value={formData.workoutsPerWeek}
-                onChange={e => handleChange('workoutsPerWeek', parseInt(e.target.value))}
+                onChange={e => handleChange('workoutsPerWeek', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -213,9 +215,10 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 max={240}
                 step={15}
                 value={formData.timePerWorkout}
-                onChange={e => handleChange('timePerWorkout', parseInt(e.target.value))}
+                onChange={e => handleChange('timePerWorkout', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 

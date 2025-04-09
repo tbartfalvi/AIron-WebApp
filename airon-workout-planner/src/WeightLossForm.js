@@ -7,7 +7,6 @@ import {
   Grid,
   Column,
   Button,
-  Stack,
   Tile,
   DatePicker,
   DatePickerInput,
@@ -15,7 +14,7 @@ import {
   RadioButton,
   ButtonSet,
 } from '@carbon/react';
-import { ArrowRight, Close } from '@carbon/icons-react';
+import { ArrowRight } from '@carbon/icons-react';
 import './ProgramForms.css';
 
 const WeightLossForm = ({ onSubmit, onCancel }) => {
@@ -23,8 +22,8 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
     startDate: new Date(),
     currentWeight: '',
     targetWeight: '',
-    weightUnit: 'lb', // Default to pounds
-    intensityLevel: 'intermediate', // Default to intermediate
+    weightUnit: 'lb',
+    intensityLevel: 'intermediate',
     workoutsPerWeek: 3,
     timePerWorkout: 60,
     goals: '',
@@ -124,6 +123,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('currentWeight', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
             
@@ -136,6 +136,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('targetWeight', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -169,9 +170,10 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 min={1}
                 max={7}
                 value={formData.workoutsPerWeek}
-                onChange={e => handleChange('workoutsPerWeek', parseInt(e.target.value))}
+                onChange={e => handleChange('workoutsPerWeek', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
@@ -183,9 +185,10 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 max={240}
                 step={15}
                 value={formData.timePerWorkout}
-                onChange={e => handleChange('timePerWorkout', parseInt(e.target.value))}
+                onChange={e => handleChange('timePerWorkout', e.target.value)}
                 className="form-input"
                 required
+                hideSteppers
               />
             </Column>
 
