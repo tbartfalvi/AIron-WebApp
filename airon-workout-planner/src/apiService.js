@@ -173,10 +173,13 @@ const apiService = {
       }
       
       const data = await response.json();
-      const programData = JSON.parse(data.schedule);
+      const programData = typeof data.json === 'string' ? JSON.parse(data.json) : data.json;
+      
+      // Get CSV data or create a simple default if not available
+      const csvData = data.csv || "Program Name,Exercise,Sets,Reps,Weight";
       
       // Create a Blob from the CSV
-      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
       
       // Create a link element and trigger download
       const link = document.createElement('a');
@@ -201,7 +204,7 @@ const apiService = {
   async deleteProgram(userId, programId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         }
