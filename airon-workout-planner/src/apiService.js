@@ -156,7 +156,70 @@ const apiService = {
       console.error('Delete program error:', error);
       throw error;
     }
+  },
+
+
+  async downloadProgram(userId, programId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get program');
+      }
+      
+      const data = await response.json();
+      const programData = JSON.parse(data.schedule);
+      
+      // Create a Blob from the CSV
+      const blob = new Blob([data.csv], { type: 'text/csv;charset=utf-8;' });
+      
+      // Create a link element and trigger download
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      
+      // Generate filename based on program details
+      const filename = `${programData.name || 'workout_program'}_${new Date().toISOString().split('T')[0]}.csv`;
+      link.setAttribute('download', filename);
+      
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Download program error:', error);
+      throw error;
+    }
+  },
+  
+
+  async deleteProgram(userId, programId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete program');
+      }
+      
+      const data = await response.json();
+      return data.result === "True";
+    } catch (error) {
+      console.error('Delete program error:', error);
+      throw error;
+    }
   }
 };
+
+
 
 export default apiService;

@@ -132,10 +132,17 @@ const LandingPage = ({ user, onLogout }) => {
     setSelectedRows(selectedRows.selectedRows);
   };
 
-  const handleDownloadProgram = () => {
-    console.log('Downloading selected programs:', selectedRows);
-    // In a real app, you would implement the download functionality here
+  const handleDownloadProgram = async () => {
+    try {
+      for (const row of selectedRows) {
+        await apiService.downloadProgram(user.id, row.id);
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      setError('Failed to download selected programs');
+    }
   };
+  
 
   const handleDeleteModalOpen = () => {
     setIsDeleteModalOpen(true);
@@ -146,33 +153,31 @@ const LandingPage = ({ user, onLogout }) => {
   };
 
   const handleDeleteProgram = async () => {
-    if (selectedRows.length === 0) return;
-    
     try {
       setDeleteInProgress(true);
       
-      // Create an array of delete promises
+      // Delete each selected program
       const deletePromises = selectedRows.map(row => 
         apiService.deleteProgram(user.id, row.id)
       );
       
       // Wait for all deletes to complete
-      await Promise.all(deletePromises);
+      const results = await Promise.all(deletePromises);
       
       // Refresh the programs list
       await fetchPrograms();
       
-      // Close the modal and reset selection
-      setIsDeleteModalOpen(false);
+      // Reset selection and close modal
       setSelectedRows([]);
-      
+      setIsDeleteModalOpen(false);
     } catch (error) {
-      console.error('Error deleting programs:', error);
-      setError('Failed to delete selected programs: ' + error.message);
+      console.error('Delete error:', error);
+      setError('Failed to delete selected programs');
     } finally {
       setDeleteInProgress(false);
     }
   };
+  
 
   const handleLogout = () => {
     onLogout();
@@ -185,6 +190,8 @@ const LandingPage = ({ user, onLogout }) => {
   const handleBackToLanding = () => {
     setCurrentForm(null);
   };
+
+  
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -452,5 +459,7 @@ const LandingPage = ({ user, onLogout }) => {
     </Theme>
   );
 };
+
+
 
 export default LandingPage;
