@@ -21,6 +21,8 @@ import './ProgramForms.css';
 const BodyBuildingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     startDate: new Date(),
+    age: '',
+    programWeeks: 8,
     currentWeight: '',
     weightUnit: 'lb',
     experienceLevel: 'intermediate',
@@ -113,9 +115,37 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               </DatePicker>
             </Column>
             
-            <Column lg={8} md={4} sm={4}></Column>
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="age"
+                label="Age"
+                min={16}
+                max={99}
+                value={formData.age}
+                onChange={e => handleChange('age', e.target.value)}
+                className="form-input"
+                required
+                hideSteppers
+              />
+            </Column>
+            
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="programWeeks"
+                label="Program Duration (weeks)"
+                min={4}
+                max={16}
+                value={formData.programWeeks}
+                onChange={e => handleChange('programWeeks', e.target.value)}
+                className="form-input"
+                required
+                hideSteppers
+              />
+            </Column>
             
             <Column lg={16} md={8} sm={4}>
+              {/* Empty space above experience level buttons */}
+              <div style={{ marginBottom: '1.5rem' }}></div>
               <div className="form-input">
                 <p className="input-label">Experience Level:</p>
                 <ButtonSet>

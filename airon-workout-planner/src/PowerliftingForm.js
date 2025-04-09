@@ -19,6 +19,8 @@ import './ProgramForms.css';
 const PowerliftingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     startDate: new Date(),
+    age: '',
+    programWeeks: 8,
     currentWeight: '',
     weightUnit: 'lb',
     benchPress1RM: '',
@@ -75,6 +77,34 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                   required
                 />
               </DatePicker>
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="age"
+                label="Age"
+                min={16}
+                max={99}
+                value={formData.age}
+                onChange={e => handleChange('age', e.target.value)}
+                className="form-input"
+                required
+                hideSteppers
+              />
+            </Column>
+
+            <Column lg={8} md={4} sm={4}>
+              <NumberInput
+                id="programWeeks"
+                label="Program Duration (weeks)"
+                min={4}
+                max={16}
+                value={formData.programWeeks}
+                onChange={e => handleChange('programWeeks', e.target.value)}
+                className="form-input"
+                required
+                hideSteppers
+              />
             </Column>
 
             <Column lg={8} md={4} sm={4}>
