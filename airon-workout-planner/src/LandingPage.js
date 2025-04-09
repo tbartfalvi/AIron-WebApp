@@ -48,10 +48,12 @@ const LandingPage = ({ user, onLogout }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState(null);
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deleteInProgress, setDeleteInProgress] = useState(false);
   
   // Fetch user's programs on component mount
   useEffect(() => {
@@ -127,7 +129,7 @@ const LandingPage = ({ user, onLogout }) => {
   };
 
   const handleRowSelection = (selectedRows) => {
-    setSelectedRows(selectedRows);
+    setSelectedRows(selectedRows.selectedRows);
   };
 
   const handleDownloadProgram = () => {
@@ -135,10 +137,41 @@ const LandingPage = ({ user, onLogout }) => {
     // In a real app, you would implement the download functionality here
   };
 
-  const handleDeleteProgram = () => {
-    console.log('Deleting selected programs:', selectedRows);
-    // Note: Backend API does not support deleting programs yet
-    // This would need to be implemented
+  const handleDeleteModalOpen = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteProgram = async () => {
+    if (selectedRows.length === 0) return;
+    
+    try {
+      setDeleteInProgress(true);
+      
+      // Create an array of delete promises
+      const deletePromises = selectedRows.map(row => 
+        apiService.deleteProgram(user.id, row.id)
+      );
+      
+      // Wait for all deletes to complete
+      await Promise.all(deletePromises);
+      
+      // Refresh the programs list
+      await fetchPrograms();
+      
+      // Close the modal and reset selection
+      setIsDeleteModalOpen(false);
+      setSelectedRows([]);
+      
+    } catch (error) {
+      console.error('Error deleting programs:', error);
+      setError('Failed to delete selected programs: ' + error.message);
+    } finally {
+      setDeleteInProgress(false);
+    }
   };
 
   const handleLogout = () => {
@@ -303,7 +336,9 @@ const LandingPage = ({ user, onLogout }) => {
                         getRowProps,
                         getSelectionProps,
                         getBatchActionProps,
-                        selectedRows
+                        selectedRows,
+                        onInputChange,
+                        onChange
                       }) => (
                         <TableContainer title="">
                           <TableToolbar>
@@ -316,13 +351,16 @@ const LandingPage = ({ user, onLogout }) => {
                               </TableBatchAction>
                               <TableBatchAction
                                 renderIcon={TrashCan}
-                                onClick={handleDeleteProgram}
+                                onClick={handleDeleteModalOpen}
                               >
                                 Delete
                               </TableBatchAction>
                             </TableBatchActions>
                             <TableToolbarContent>
-                              <TableToolbarSearch />
+                              <TableToolbarSearch
+                                persistent={true}
+                                onChange={onInputChange}
+                              />
                               <Button 
                                 renderIcon={AddFilled} 
                                 onClick={handleCreateProgram}
@@ -356,6 +394,7 @@ const LandingPage = ({ user, onLogout }) => {
                           </Table>
                         </TableContainer>
                       )}
+                      onSelect={handleRowSelection}
                     />
                   </div>
                 ) : (
@@ -393,6 +432,22 @@ const LandingPage = ({ user, onLogout }) => {
             </p>
           </Modal>
         )}
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          open={isDeleteModalOpen}
+          modalHeading="Delete Programs"
+          primaryButtonText={deleteInProgress ? "Deleting..." : "Delete"}
+          secondaryButtonText="Cancel"
+          onRequestClose={handleDeleteModalClose}
+          onRequestSubmit={handleDeleteProgram}
+          danger
+          primaryButtonDisabled={deleteInProgress}
+        >
+          <p className="about-text">
+            Are you sure you want to delete the selected program(s)? This action cannot be undone.
+          </p>
+        </Modal>
       </div>
     </Theme>
   );
