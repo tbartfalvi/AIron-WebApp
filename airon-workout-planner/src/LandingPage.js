@@ -43,6 +43,7 @@ import PowerliftingForm from './PowerliftingForm';
 import BodyBuildingForm from './BodyBuildingForm';
 import WeightLossForm from './WeightLossForm';
 import apiService from './apiService';
+import WorkoutRow from './WorkoutRow';
 
 const LandingPage = ({ user, onLogout }) => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -128,9 +129,28 @@ const LandingPage = ({ user, onLogout }) => {
     handleCreateClick();
   };
 
-  const handleRowSelection = (selectedRows) => {
-    setSelectedRows(selectedRows.selectedRows);
+  const handleRowSelection = (rowId, isSelected) => {
+    // Sets the isSelected attribute to the appropriate value.
+    selectedRows.map(r => {
+      if (r.id == rowId) {
+        r.isSelected = isSelected;
+      }
+    });
+    setSelectedRows(selectedRows);
   };
+
+  const handleRowAdd = (row) => {
+    // Add a new table select row to the selected rows array.
+    var rows = selectedRows;
+    const i = rows.find(r => r.id == row.id)?.id ?? -1;
+    
+    // Check that the row has not been added to the list.
+    // If it had not, add it.
+    if (i == -1) {
+      rows.push(row);
+      setSelectedRows(rows);
+    }
+  }
 
   const handleDownloadProgram = async () => {
     try {
@@ -143,7 +163,6 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-
   const handleDeleteModalOpen = () => {
     setIsDeleteModalOpen(true);
   };
@@ -155,20 +174,14 @@ const LandingPage = ({ user, onLogout }) => {
   const handleDeleteProgram = async () => {
     try {
       setDeleteInProgress(true);
-      
-      // Delete each selected program
-      const deletePromises = selectedRows.map(row => 
-        apiService.deleteProgram(user.id, row.id)
-      );
-      
-      // Wait for all deletes to complete
-      const results = await Promise.all(deletePromises);
+      console.log(selectedRows);
+      selectedRows.filter(r => r.isSelected).forEach(row => {
+        apiService.deleteProgram(user.id, row.id);
+      });
       
       // Refresh the programs list
       await fetchPrograms();
       
-      // Reset selection and close modal
-      setSelectedRows([]);
       setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('Delete error:', error);
@@ -178,7 +191,6 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-
   const handleLogout = () => {
     onLogout();
   };
@@ -190,8 +202,6 @@ const LandingPage = ({ user, onLogout }) => {
   const handleBackToLanding = () => {
     setCurrentForm(null);
   };
-
-  
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -380,7 +390,7 @@ const LandingPage = ({ user, onLogout }) => {
                           <Table>
                             <TableHead>
                               <TableRow>
-                                <TableSelectAll {...getSelectionProps()} />
+                                <TableSelectAll {...getSelectionProps()}/>
                                 {headers.map(header => (
                                   <TableHeader {...getHeaderProps({ header })} key={header.key}>
                                     {header.header}
@@ -390,18 +400,19 @@ const LandingPage = ({ user, onLogout }) => {
                             </TableHead>
                             <TableBody>
                               {rows.map(row => (
-                                <TableRow {...getRowProps({ row })} key={row.id}>
-                                  <TableSelectRow {...getSelectionProps({ row })} />
-                                  {row.cells.map(cell => (
-                                    <TableCell key={cell.id}>{cell.value}</TableCell>
-                                  ))}
-                                </TableRow>
+                                <WorkoutRow 
+                                  key={row.id}
+                                  row={row} 
+                                  getRowProps={getRowProps} 
+                                  getSelectionProps={getSelectionProps} 
+                                  handleRowSelection={handleRowSelection}
+                                  handleRowAdd={handleRowAdd}
+                                />
                               ))}
                             </TableBody>
                           </Table>
                         </TableContainer>
                       )}
-                      onSelect={handleRowSelection}
                     />
                   </div>
                 ) : (
