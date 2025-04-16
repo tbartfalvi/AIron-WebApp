@@ -45,6 +45,7 @@ import WeightLossForm from './WeightLossForm';
 import apiService from './apiService';
 
 const LandingPage = ({ user, onLogout }) => {
+  // Local state for the delete modal selection (if needed)
   const [selectedRows, setSelectedRows] = useState([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -65,9 +66,10 @@ const LandingPage = ({ user, onLogout }) => {
       setLoading(true);
       const userPrograms = await apiService.getPrograms(user.id);
       
-      // Transform the programs data to match the expected format
+      // Transform the programs data to match the expected format.
+      // Make sure each program has a unique id.
       const formattedPrograms = userPrograms.map(program => ({
-        id: program.id,
+        id: program.id, // Ensure this is unique per program!
         name: program.name,
         dateCreated: new Date(program.created_on).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -87,7 +89,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-  // Helper function to convert program type from enum string to readable string
+  // Helper to convert program type enum string to a readable string
   const getProgramTypeName = (typeEnum) => {
     switch(typeEnum) {
       case "ScheduleType.BODY_BUILDING":
@@ -101,7 +103,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-  // Map program type to enum value
+  // Map program type (from form) to enum value
   const getProgramTypeEnum = (type) => {
     switch(type) {
       case "bodybuilding":
@@ -128,14 +130,15 @@ const LandingPage = ({ user, onLogout }) => {
     handleCreateClick();
   };
 
-  const handleDownloadProgram = async (selectedRows) => {
-    console.log('handleDownloadProgram called. Selected rows:', selectedRows);
+  // Download selected programs using the selectedRows passed from the render callback
+  const handleDownloadProgram = async (selectedRowsFromTable) => {
+    console.log('handleDownloadProgram called. Selected rows:', selectedRowsFromTable);
     try {
-      if (!selectedRows || selectedRows.length === 0) {
+      if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
         console.log("No rows selected for download");
         return;
       }
-      for (const row of selectedRows) {
+      for (const row of selectedRowsFromTable) {
         console.log('Attempting download for program id:', row.id);
         await apiService.downloadProgram(user.id, row.id);
       }
@@ -145,9 +148,14 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  const handleDeleteModalOpen = (selectedRows) => {
-    console.log('handleDeleteModalOpen called. Selected rows:', selectedRows);
-    setSelectedRows(selectedRows);
+  // Open the delete modal and store the currently selected rows in local state for deletion
+  const handleDeleteModalOpen = (selectedRowsFromTable) => {
+    console.log('handleDeleteModalOpen called. Selected rows:', selectedRowsFromTable);
+    if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
+      console.log("No rows selected for deletion");
+      return;
+    }
+    setSelectedRows(selectedRowsFromTable);
     setIsDeleteModalOpen(true);
   };
 
@@ -225,7 +233,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Render the appropriate form based on the selected program type
+  // Render the form based on selected program type
   const renderForm = () => {
     switch(currentForm) {
       case 'powerlifting':
@@ -254,7 +262,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Use fetched programs if available, otherwise use sample data
+  // Use fetched programs if available; otherwise, an empty array.
   const programData = programs.length > 0 ? programs : [];
 
   return (
@@ -339,6 +347,7 @@ const LandingPage = ({ user, onLogout }) => {
                         { key: 'type', header: 'Program Type' }
                       ]}
                       isSortable
+                      // Do not pass an external onSelect
                       render={({
                         rows,
                         headers,
@@ -349,61 +358,64 @@ const LandingPage = ({ user, onLogout }) => {
                         selectedRows,
                         onInputChange,
                         onChange
-                      }) => (
-                        <TableContainer title="">
-                          <TableToolbar>
-                            <TableBatchActions {...getBatchActionProps()}>
-                              <TableBatchAction
-                                renderIcon={Download}
-                                onClick={() => handleDownloadProgram(selectedRows)}
-                              >
-                                Download
-                              </TableBatchAction>
-                              <TableBatchAction
-                                renderIcon={TrashCan}
-                                onClick={() => handleDeleteModalOpen(selectedRows)}
-                              >
-                                Delete
-                              </TableBatchAction>
-                            </TableBatchActions>
-                            <TableToolbarContent>
-                              <TableToolbarSearch
-                                persistent={true}
-                                onChange={onInputChange}
-                              />
-                              <Button 
-                                renderIcon={AddFilled} 
-                                onClick={handleCreateProgram}
-                                className="create-program-table-button"
-                              >
-                                Create program
-                              </Button>
-                            </TableToolbarContent>
-                          </TableToolbar>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableSelectAll {...getSelectionProps()} />
-                                {headers.map(header => (
-                                  <TableHeader {...getHeaderProps({ header })} key={header.key}>
-                                    {header.header}
-                                  </TableHeader>
-                                ))}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {rows.map(row => (
-                                <TableRow {...getRowProps({ row })} key={row.id}>
-                                  <TableSelectRow {...getSelectionProps({ row })} />
-                                  {row.cells.map(cell => (
-                                    <TableCell key={cell.id}>{cell.value}</TableCell>
+                      }) => {
+                        console.log("SelectedRows inside DataTable render:", selectedRows);
+                        return (
+                          <TableContainer title="">
+                            <TableToolbar>
+                              <TableBatchActions {...getBatchActionProps()}>
+                                <TableBatchAction
+                                  renderIcon={Download}
+                                  onClick={() => handleDownloadProgram(selectedRows)}
+                                >
+                                  Download
+                                </TableBatchAction>
+                                <TableBatchAction
+                                  renderIcon={TrashCan}
+                                  onClick={() => handleDeleteModalOpen(selectedRows)}
+                                >
+                                  Delete
+                                </TableBatchAction>
+                              </TableBatchActions>
+                              <TableToolbarContent>
+                                <TableToolbarSearch
+                                  persistent={true}
+                                  onChange={onInputChange}
+                                />
+                                <Button 
+                                  renderIcon={AddFilled} 
+                                  onClick={handleCreateProgram}
+                                  className="create-program-table-button"
+                                >
+                                  Create program
+                                </Button>
+                              </TableToolbarContent>
+                            </TableToolbar>
+                            <Table>
+                              <TableHead>
+                                <TableRow>
+                                  <TableSelectAll {...getSelectionProps()} />
+                                  {headers.map(header => (
+                                    <TableHeader {...getHeaderProps({ header })} key={header.key}>
+                                      {header.header}
+                                    </TableHeader>
                                   ))}
                                 </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      )}
+                              </TableHead>
+                              <TableBody>
+                                {rows.map(row => (
+                                  <TableRow {...getRowProps({ row })} key={row.id}>
+                                    <TableSelectRow {...getSelectionProps({ row })} />
+                                    {row.cells.map(cell => (
+                                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                                    ))}
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        );
+                      }}
                     />
                   </div>
                 ) : (
