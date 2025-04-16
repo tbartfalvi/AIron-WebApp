@@ -129,22 +129,30 @@ const LandingPage = ({ user, onLogout }) => {
     handleCreateClick();
   };
 
-  const handleDownloadProgram = async (selectedRowsFromTable) => {
-    console.log('handleDownloadProgram called. Selected rows:', selectedRowsFromTable);
-    try {
-      if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
-        console.log("No rows selected for download");
-        return;
-      }
-      for (const row of selectedRowsFromTable) {
-        console.log('Attempting download for program id:', row.id);
-        await apiService.downloadProgram(user.id, row.id);
-      }
-    } catch (error) {
-      console.error('Download error:', error);
-      setError('Failed to download selected programs');
+const handleDownloadProgram = async (selectedRowsFromTable) => {
+  console.log('handleDownloadProgram called. Selected rows:', selectedRowsFromTable);
+  try {
+    if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
+      console.log("No rows selected for download");
+      setError('Please select at least one program to download');
+      return;
     }
-  };
+    
+    for (const row of selectedRowsFromTable) {
+      console.log('Attempting download for program id:', row.id);
+      try {
+        await apiService.downloadProgram(user.id, row.id);
+        console.log('Download successful for program:', row.name);
+      } catch (error) {
+        console.error(`Download failed for program ${row.name} (${row.id}):`, error);
+        throw new Error(`Failed to download program "${row.name}": ${error.message}`);
+      }
+    }
+  } catch (error) {
+    console.error('Download error:', error);
+    setError('Failed to download selected programs: ' + error.message);
+  }
+};
 
   const handleDeleteModalOpen = (selectedRowsFromTable) => {
     console.log('handleDeleteModalOpen called. Selected rows:', selectedRowsFromTable);
