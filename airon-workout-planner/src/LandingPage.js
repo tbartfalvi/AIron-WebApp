@@ -45,8 +45,7 @@ import WeightLossForm from './WeightLossForm';
 import apiService from './apiService';
 
 const LandingPage = ({ user, onLogout }) => {
-  // Local state for the delete modal selection (if needed)
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]); // for delete modal storage
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -65,11 +64,10 @@ const LandingPage = ({ user, onLogout }) => {
     try {
       setLoading(true);
       const userPrograms = await apiService.getPrograms(user.id);
-      
       // Transform the programs data to match the expected format.
-      // Make sure each program has a unique id.
+      // Ensure each program has a unique string id.
       const formattedPrograms = userPrograms.map(program => ({
-        id: program.id, // Ensure this is unique per program!
+        id: program.id.toString(),  // convert id to string, if necessary
         name: program.name,
         dateCreated: new Date(program.created_on).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -79,6 +77,7 @@ const LandingPage = ({ user, onLogout }) => {
         type: getProgramTypeName(program.type)
       }));
       
+      console.log("Formatted program data:", formattedPrograms);
       setPrograms(formattedPrograms);
       setError('');
     } catch (error) {
@@ -89,7 +88,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-  // Helper to convert program type enum string to a readable string
+  // Helper to convert program type enum string to readable string
   const getProgramTypeName = (typeEnum) => {
     switch(typeEnum) {
       case "ScheduleType.BODY_BUILDING":
@@ -130,7 +129,6 @@ const LandingPage = ({ user, onLogout }) => {
     handleCreateClick();
   };
 
-  // Download selected programs using the selectedRows passed from the render callback
   const handleDownloadProgram = async (selectedRowsFromTable) => {
     console.log('handleDownloadProgram called. Selected rows:', selectedRowsFromTable);
     try {
@@ -148,13 +146,13 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Open the delete modal and store the currently selected rows in local state for deletion
   const handleDeleteModalOpen = (selectedRowsFromTable) => {
     console.log('handleDeleteModalOpen called. Selected rows:', selectedRowsFromTable);
     if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
       console.log("No rows selected for deletion");
       return;
     }
+    // Save the selected rows in local state for deletion
     setSelectedRows(selectedRowsFromTable);
     setIsDeleteModalOpen(true);
   };
@@ -167,21 +165,15 @@ const LandingPage = ({ user, onLogout }) => {
     console.log('handleDeleteProgram called. Selected rows:', selectedRows);
     try {
       setDeleteInProgress(true);
-  
-      // Delete each selected program
       const deletePromises = selectedRows.map(row => {
         console.log('Deleting program with id:', row.id);
         return apiService.deleteProgram(user.id, row.id);
       });
-  
-      // Wait for all deletes to complete
       const results = await Promise.all(deletePromises);
       console.log('Delete results:', results);
       
-      // Refresh the programs list
+      // Refresh the programs list after deletion
       await fetchPrograms();
-      
-      // Reset selection and close modal
       setSelectedRows([]);
       setIsDeleteModalOpen(false);
     } catch (error) {
@@ -218,7 +210,6 @@ const LandingPage = ({ user, onLogout }) => {
       );
       
       if (result === "True") {
-        // Refresh programs list
         await fetchPrograms();
         setCurrentForm(null);
       } else {
@@ -233,7 +224,6 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Render the form based on selected program type
   const renderForm = () => {
     switch(currentForm) {
       case 'powerlifting':
@@ -347,7 +337,6 @@ const LandingPage = ({ user, onLogout }) => {
                         { key: 'type', header: 'Program Type' }
                       ]}
                       isSortable
-                      // Do not pass an external onSelect
                       render={({
                         rows,
                         headers,
@@ -359,7 +348,7 @@ const LandingPage = ({ user, onLogout }) => {
                         onInputChange,
                         onChange
                       }) => {
-                        console.log("SelectedRows inside DataTable render:", selectedRows);
+                        console.log("Inside DataTable render, selectedRows:", selectedRows);
                         return (
                           <TableContainer title="">
                             <TableToolbar>
