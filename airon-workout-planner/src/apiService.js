@@ -130,12 +130,15 @@ const apiService = {
       }
       
       const data = await response.json();
-      return JSON.parse(data.schedule);
+      // data.schedule is already an object, so return it directly.
+      return data.schedule;
     } catch (error) {
       console.error('Get program error:', error);
       throw error;
     }
   },
+
+
 
 
 async downloadProgram(userId, programId) {
