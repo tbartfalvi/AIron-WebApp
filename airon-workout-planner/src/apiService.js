@@ -138,46 +138,48 @@ const apiService = {
   },
 
 
-  async downloadProgram(userId, programId) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to get program');
+async downloadProgram(userId, programId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       }
-      
-      const data = await response.json();
-      const programData = typeof data.json === 'string' ? JSON.parse(data.json) : data.json;
-      
-      // Get CSV data or create a simple default if not available
-      const csvData = data.csv || "Program Name,Exercise,Sets,Reps,Weight";
-      
-      // Create a Blob from the CSV
-      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-      
-      // Create a link element and trigger download
-      const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      
-      // Generate filename based on program details
-      const filename = `${programData.name || 'workout_program'}_${new Date().toISOString().split('T')[0]}.csv`;
-      link.setAttribute('download', filename);
-      
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error('Download program error:', error);
-      throw error;
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to get program');
     }
-  },
+    
+    const data = await response.json();
+    // Now the backend returns an object { schedule: { ... } }
+    const schedule = data.schedule;
+    const programData = typeof schedule.json === 'string' ? JSON.parse(schedule.json) : schedule.json;
+    
+    // Use the schedule CSV property
+    const csvData = schedule.csv || "Program Name,Exercise,Sets,Reps,Weight";
+    
+    // Create a Blob from the CSV
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    
+    // Use the schedule name for the filename
+    const filename = `${schedule.name || 'workout_program'}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.setAttribute('download', filename);
+    
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Download program error:', error);
+    throw error;
+  }
+},
   
 
  async deleteProgram(userId, programId) {
