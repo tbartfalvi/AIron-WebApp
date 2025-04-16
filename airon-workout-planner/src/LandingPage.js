@@ -133,8 +133,10 @@ const LandingPage = ({ user, onLogout }) => {
   };
 
   const handleDownloadProgram = async () => {
+    console.log('handleDownloadProgram called. Selected rows:', selectedRows);
     try {
       for (const row of selectedRows) {
+        console.log('Attempting download for program id:', row.id);
         await apiService.downloadProgram(user.id, row.id);
       }
     } catch (error) {
@@ -142,6 +144,7 @@ const LandingPage = ({ user, onLogout }) => {
       setError('Failed to download selected programs');
     }
   };
+
   
 
   const handleDeleteModalOpen = () => {
@@ -153,16 +156,19 @@ const LandingPage = ({ user, onLogout }) => {
   };
 
   const handleDeleteProgram = async () => {
+    console.log('handleDeleteProgram called. Selected rows:', selectedRows);
     try {
       setDeleteInProgress(true);
-      
+  
       // Delete each selected program
-      const deletePromises = selectedRows.map(row => 
-        apiService.deleteProgram(user.id, row.id)
-      );
-      
+      const deletePromises = selectedRows.map(row => {
+        console.log('Deleting program with id:', row.id);
+        return apiService.deleteProgram(user.id, row.id);
+      });
+  
       // Wait for all deletes to complete
       const results = await Promise.all(deletePromises);
+      console.log('Delete results:', results);
       
       // Refresh the programs list
       await fetchPrograms();
@@ -177,6 +183,7 @@ const LandingPage = ({ user, onLogout }) => {
       setDeleteInProgress(false);
     }
   };
+
   
 
   const handleLogout = () => {
