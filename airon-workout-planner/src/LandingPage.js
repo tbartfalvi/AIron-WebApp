@@ -46,7 +46,7 @@ import apiService from './apiService';
 import WorkoutRow from './WorkoutRow';
 
 const LandingPage = ({ user, onLogout }) => {
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]); // for delete modal storage
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -65,10 +65,10 @@ const LandingPage = ({ user, onLogout }) => {
     try {
       setLoading(true);
       const userPrograms = await apiService.getPrograms(user.id);
-      
-      // Transform the programs data to match the expected format
+      // Transform the programs data to match the expected format.
+      // Ensure each program has a unique string id.
       const formattedPrograms = userPrograms.map(program => ({
-        id: program.id,
+        id: program.id.toString(),  // convert id to string, if necessary
         name: program.name,
         dateCreated: new Date(program.created_on).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -78,6 +78,7 @@ const LandingPage = ({ user, onLogout }) => {
         type: getProgramTypeName(program.type)
       }));
       
+      console.log("Formatted program data:", formattedPrograms);
       setPrograms(formattedPrograms);
       setError('');
     } catch (error) {
@@ -88,7 +89,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-  // Helper function to convert program type from enum string to readable string
+  // Helper to convert program type enum string to readable string
   const getProgramTypeName = (typeEnum) => {
     switch(typeEnum) {
       case "ScheduleType.BODY_BUILDING":
@@ -102,7 +103,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
   
-  // Map program type to enum value
+  // Map program type (from form) to enum value
   const getProgramTypeEnum = (type) => {
     switch(type) {
       case "bodybuilding":
@@ -154,7 +155,12 @@ const LandingPage = ({ user, onLogout }) => {
 
   const handleDownloadProgram = async () => {
     try {
-      for (const row of selectedRows) {
+      if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
+        console.log("No rows selected for download");
+        return;
+      }
+      for (const row of selectedRowsFromTable) {
+        console.log('Attempting download for program id:', row.id);
         await apiService.downloadProgram(user.id, row.id);
       }
     } catch (error) {
@@ -162,35 +168,78 @@ const LandingPage = ({ user, onLogout }) => {
       setError('Failed to download selected programs');
     }
   };
-  
-  const handleDeleteModalOpen = () => {
+
+
+  const handleDeleteModalOpen = (selectedRowsFromTable) => {
+    console.log('handleDeleteModalOpen called. Selected rows:', selectedRowsFromTable);
+    if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
+      console.log("No rows selected for deletion");
+      return;
+    }
+    // Save the selected rows in local state for deletion
+    setSelectedRows(selectedRowsFromTable);
     setIsDeleteModalOpen(true);
   };
+
 
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const handleDeleteProgram = async () => {
-    try {
-      setDeleteInProgress(true);
-      console.log(selectedRows);
-      selectedRows.filter(r => r.isSelected).forEach(row => {
-        apiService.deleteProgram(user.id, row.id);
-      });
+const handleDeleteProgram = async () => {
+  console.log('handleDeleteProgram called. Selected rows:', selectedRows);
+  try {
+    setDeleteInProgress(true);
+    
+    // Process one deletion at a time to identify any specific failures
+    let successCount = 0;
+    let failureMessages = [];
+    
+    for (const row of selectedRows) {
+      console.log('Deleting program with id:', row.id);
       
-      // Refresh the programs list
-      await fetchPrograms();
-      
-      setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Delete error:', error);
-      setError('Failed to delete selected programs');
-    } finally {
-      setDeleteInProgress(false);
+      try {
+        // Call the delete API with the exact ID format
+        const result = await apiService.deleteProgram(user.id, row.id);
+        console.log('Delete result for program', row.id, ':', result);
+        
+        // If the result is "True" (as a string), it was successful
+        if (result === "True") {
+          successCount++;
+        } else {
+          failureMessages.push(`Failed to delete "${row.name}"`);
+        }
+      } catch (error) {
+        console.error(`Error deleting program ${row.name} (${row.id}):`, error);
+        failureMessages.push(`Error deleting "${row.name}": ${error.message}`);
+      }
     }
-  };
-  
+    
+    // Give appropriate feedback based on results
+    if (failureMessages.length > 0) {
+      if (successCount > 0) {
+        setError(`Successfully deleted ${successCount} program(s). Failed to delete some programs: ${failureMessages.join('; ')}`);
+      } else {
+        setError(`Failed to delete programs: ${failureMessages.join('; ')}`);
+      }
+    } else {
+      // All deletions were successful
+      setError(''); // Clear any existing errors
+    }
+    
+    // Refresh the programs list
+    await fetchPrograms();
+    setIsDeleteModalOpen(false);
+    setSelectedRows([]);
+  } catch (error) {
+    console.error('Delete error:', error);
+    setError('Failed to delete selected programs: ' + error.message);
+  } finally {
+    setDeleteInProgress(false);
+  }
+};
+
+
   const handleLogout = () => {
     onLogout();
   };
@@ -217,7 +266,6 @@ const LandingPage = ({ user, onLogout }) => {
       );
       
       if (result === "True") {
-        // Refresh programs list
         await fetchPrograms();
         setCurrentForm(null);
       } else {
@@ -232,7 +280,6 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Render the appropriate form based on the selected program type
   const renderForm = () => {
     switch(currentForm) {
       case 'powerlifting':
@@ -261,7 +308,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  // Use fetched programs if available, otherwise use sample data
+  // Use fetched programs if available; otherwise, an empty array.
   const programData = programs.length > 0 ? programs : [];
 
   return (
@@ -356,63 +403,64 @@ const LandingPage = ({ user, onLogout }) => {
                         selectedRows,
                         onInputChange,
                         onChange
-                      }) => (
-                        <TableContainer title="">
-                          <TableToolbar>
-                            <TableBatchActions {...getBatchActionProps()}>
-                              <TableBatchAction
-                                renderIcon={Download}
-                                onClick={handleDownloadProgram}
-                              >
-                                Download
-                              </TableBatchAction>
-                              <TableBatchAction
-                                renderIcon={TrashCan}
-                                onClick={handleDeleteModalOpen}
-                              >
-                                Delete
-                              </TableBatchAction>
-                            </TableBatchActions>
-                            <TableToolbarContent>
-                              <TableToolbarSearch
-                                persistent={true}
-                                onChange={onInputChange}
-                              />
-                              <Button 
-                                renderIcon={AddFilled} 
-                                onClick={handleCreateProgram}
-                                className="create-program-table-button"
-                              >
-                                Create program
-                              </Button>
-                            </TableToolbarContent>
-                          </TableToolbar>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableSelectAll {...getSelectionProps()}/>
-                                {headers.map(header => (
-                                  <TableHeader {...getHeaderProps({ header })} key={header.key}>
-                                    {header.header}
-                                  </TableHeader>
-                                ))}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {rows.map(row => (
-                                <WorkoutRow 
-                                  key={row.id}
-                                  row={row} 
-                                  getRowProps={getRowProps} 
-                                  getSelectionProps={getSelectionProps} 
-                                  handleRowSelection={handleRowSelection}
-                                  handleRowAdd={handleRowAdd}
+                      }) => {
+                        console.log("Inside DataTable render, selectedRows:", selectedRows);
+                        return (
+                          <TableContainer title="">
+                            <TableToolbar>
+                              <TableBatchActions {...getBatchActionProps()}>
+                                <TableBatchAction
+                                  renderIcon={Download}
+                                  onClick={() => handleDownloadProgram(selectedRows)}
+                                >
+                                  Download
+                                </TableBatchAction>
+                                <TableBatchAction
+                                  renderIcon={TrashCan}
+                                  onClick={() => handleDeleteModalOpen(selectedRows)}
+                                >
+                                  Delete
+                                </TableBatchAction>
+                              </TableBatchActions>
+                              <TableToolbarContent>
+                                <TableToolbarSearch
+                                  persistent={true}
+                                  onChange={onInputChange}
                                 />
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      )}
+                                <Button 
+                                  renderIcon={AddFilled} 
+                                  onClick={handleCreateProgram}
+                                  className="create-program-table-button"
+                                >
+                                  Create program
+                                </Button>
+                              </TableToolbarContent>
+                            </TableToolbar>
+                            <Table>
+                              <TableHead>
+                                <TableRow>
+                                  <TableSelectAll {...getSelectionProps()} />
+                                  {headers.map(header => (
+                                    <TableHeader {...getHeaderProps({ header })} key={header.key}>
+                                      {header.header}
+                                    </TableHeader>
+                                  ))}
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {rows.map(row => (
+                                  <TableRow {...getRowProps({ row })} key={row.id}>
+                                    <TableSelectRow {...getSelectionProps({ row })} />
+                                    {row.cells.map(cell => (
+                                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                                    ))}
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        );
+                      }}
                     />
                   </div>
                 ) : (
@@ -470,7 +518,5 @@ const LandingPage = ({ user, onLogout }) => {
     </Theme>
   );
 };
-
-
 
 export default LandingPage;
