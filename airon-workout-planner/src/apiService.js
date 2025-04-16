@@ -184,48 +184,52 @@ async downloadProgram(userId, programId) {
   }
 },
   
-
 async deleteProgram(userId, programId) {
-    try {
-      console.log(`Attempting to delete program. User ID: ${userId}, Program ID: ${programId}`);
-      
-      // Ensure both IDs are properly formatted and encoded
-      const sanitizedUserId = encodeURIComponent(userId.trim());
-      const sanitizedProgramId = encodeURIComponent(programId.trim());
-      
-      const url = `${API_BASE_URL}/schedule-delete/${sanitizedUserId}/${sanitizedProgramId}`;
-      console.log('Delete URL:', url);
-      
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      console.log('Delete response status:', response.status);
-      
-      if (!response.ok) {
-        // Get the error message from the response if possible
-        let errorText;
-        try {
-          const errorData = await response.json();
-          errorText = errorData.detail || 'Server returned error ' + response.status;
-        } catch (e) {
-          errorText = 'Server returned error ' + response.status;
-        }
-        
-        throw new Error(errorText);
+  try {
+    console.log(`Attempting to delete program. User ID: ${userId}, Program ID: ${programId}`);
+    
+    // Ensure both IDs are properly formatted and encoded
+    const sanitizedUserId = encodeURIComponent(String(userId).trim());
+    const sanitizedProgramId = encodeURIComponent(String(programId).trim());
+    
+    const url = `${API_BASE_URL}/schedule-delete/${sanitizedUserId}/${sanitizedProgramId}`;
+    console.log('Delete URL:', url);
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    console.log('Delete response status:', response.status);
+    
+    // Handle different error cases
+    if (!response.ok) {
+      let errorText;
+      try {
+        const errorData = await response.json();
+        errorText = errorData.detail || `Server returned error ${response.status}`;
+      } catch (e) {
+        errorText = `Server returned error ${response.status}`;
       }
       
-      const data = await response.json();
-      console.log('Delete response data:', data);
-      return data.result;
-    } catch (error) {
-      console.error('Delete program error:', error);
-      throw error;
+      console.error('Delete error response:', errorText);
+      throw new Error(errorText);
     }
+    
+    // Parse the successful response
+    const data = await response.json();
+    console.log('Delete response data:', data);
+    
+    // Return the result (should be "True" as a string based on backend implementation)
+    return data.result;
+  } catch (error) {
+    console.error('Delete program error:', error);
+    throw error;
   }
+}
+
 
 };
 
