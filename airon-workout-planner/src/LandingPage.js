@@ -128,13 +128,13 @@ const LandingPage = ({ user, onLogout }) => {
     handleCreateClick();
   };
 
-  const handleRowSelection = (selectedRows) => {
-    setSelectedRows(selectedRows.selectedRows);
-  };
-
-  const handleDownloadProgram = async () => {
+  const handleDownloadProgram = async (selectedRows) => {
     console.log('handleDownloadProgram called. Selected rows:', selectedRows);
     try {
+      if (!selectedRows || selectedRows.length === 0) {
+        console.log("No rows selected for download");
+        return;
+      }
       for (const row of selectedRows) {
         console.log('Attempting download for program id:', row.id);
         await apiService.downloadProgram(user.id, row.id);
@@ -145,9 +145,9 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  
-
-  const handleDeleteModalOpen = () => {
+  const handleDeleteModalOpen = (selectedRows) => {
+    console.log('handleDeleteModalOpen called. Selected rows:', selectedRows);
+    setSelectedRows(selectedRows);
     setIsDeleteModalOpen(true);
   };
 
@@ -184,8 +184,6 @@ const LandingPage = ({ user, onLogout }) => {
     }
   };
 
-  
-
   const handleLogout = () => {
     onLogout();
   };
@@ -197,8 +195,6 @@ const LandingPage = ({ user, onLogout }) => {
   const handleBackToLanding = () => {
     setCurrentForm(null);
   };
-
-  
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -359,13 +355,13 @@ const LandingPage = ({ user, onLogout }) => {
                             <TableBatchActions {...getBatchActionProps()}>
                               <TableBatchAction
                                 renderIcon={Download}
-                                onClick={handleDownloadProgram}
+                                onClick={() => handleDownloadProgram(selectedRows)}
                               >
                                 Download
                               </TableBatchAction>
                               <TableBatchAction
                                 renderIcon={TrashCan}
-                                onClick={handleDeleteModalOpen}
+                                onClick={() => handleDeleteModalOpen(selectedRows)}
                               >
                                 Delete
                               </TableBatchAction>
@@ -408,7 +404,6 @@ const LandingPage = ({ user, onLogout }) => {
                           </Table>
                         </TableContainer>
                       )}
-                      onSelect={handleRowSelection}
                     />
                   </div>
                 ) : (
@@ -466,7 +461,5 @@ const LandingPage = ({ user, onLogout }) => {
     </Theme>
   );
 };
-
-
 
 export default LandingPage;
