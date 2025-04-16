@@ -48,7 +48,7 @@ const apiService = {
   async getUserInfo(userId) {
     try {
       const response = await fetch(`${API_BASE_URL}/user-info/${userId}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
