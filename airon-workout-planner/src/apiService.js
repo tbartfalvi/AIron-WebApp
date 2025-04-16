@@ -185,26 +185,48 @@ async downloadProgram(userId, programId) {
 },
   
 
- async deleteProgram(userId, programId) {
+async deleteProgram(userId, programId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
+      console.log(`Attempting to delete program. User ID: ${userId}, Program ID: ${programId}`);
+      
+      // Ensure both IDs are properly formatted and encoded
+      const sanitizedUserId = encodeURIComponent(userId.trim());
+      const sanitizedProgramId = encodeURIComponent(programId.trim());
+      
+      const url = `${API_BASE_URL}/schedule-delete/${sanitizedUserId}/${sanitizedProgramId}`;
+      console.log('Delete URL:', url);
+      
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         }
       });
       
+      console.log('Delete response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Failed to delete program');
+        // Get the error message from the response if possible
+        let errorText;
+        try {
+          const errorData = await response.json();
+          errorText = errorData.detail || 'Server returned error ' + response.status;
+        } catch (e) {
+          errorText = 'Server returned error ' + response.status;
+        }
+        
+        throw new Error(errorText);
       }
       
       const data = await response.json();
+      console.log('Delete response data:', data);
       return data.result;
     } catch (error) {
       console.error('Delete program error:', error);
       throw error;
     }
   }
+
 };
 
 
