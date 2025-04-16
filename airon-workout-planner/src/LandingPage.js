@@ -163,40 +163,59 @@ const handleDownloadProgram = async (selectedRowsFromTable) => {
     setIsDeleteModalOpen(false);
   };
 
- const handleDeleteProgram = async () => {
-    console.log('handleDeleteProgram called. Selected rows:', selectedRows);
-    try {
-      setDeleteInProgress(true);
+const handleDeleteProgram = async () => {
+  console.log('handleDeleteProgram called. Selected rows:', selectedRows);
+  try {
+    setDeleteInProgress(true);
+    
+    // Process one deletion at a time to identify any specific failures
+    let successCount = 0;
+    let failureMessages = [];
+    
+    for (const row of selectedRows) {
+      console.log('Deleting program with id:', row.id);
       
-      // Process one deletion at a time rather than using Promise.all
-      // This can help identify where failures happen
-      for (const row of selectedRows) {
-        console.log('Deleting program with id:', row.id);
+      try {
+        // Call the delete API with the exact ID format
+        const result = await apiService.deleteProgram(user.id, row.id);
+        console.log('Delete result for program', row.id, ':', result);
         
-        // Getting the raw ID from the row
-        const programId = row.id;
-        
-        // Calling delete API with exact ID format
-        const result = await apiService.deleteProgram(user.id, programId);
-        console.log('Delete result for program', programId, ':', result);
-        
-        // Check if the result was successful
-        if (result !== "True") {
-          throw new Error(`Failed to delete program with id ${programId}`);
+        // If the result is "True" (as a string), it was successful
+        if (result === "True") {
+          successCount++;
+        } else {
+          failureMessages.push(`Failed to delete "${row.name}"`);
         }
+      } catch (error) {
+        console.error(`Error deleting program ${row.name} (${row.id}):`, error);
+        failureMessages.push(`Error deleting "${row.name}": ${error.message}`);
       }
-      
-      // Refresh the programs list after deletion
-      await fetchPrograms();
-      setIsDeleteModalOpen(false);
-      setSelectedRows([]);
-    } catch (error) {
-      console.error('Delete error:', error);
-      setError('Failed to delete selected programs: ' + error.message);
-    } finally {
-      setDeleteInProgress(false);
     }
-  };
+    
+    // Give appropriate feedback based on results
+    if (failureMessages.length > 0) {
+      if (successCount > 0) {
+        setError(`Successfully deleted ${successCount} program(s). Failed to delete some programs: ${failureMessages.join('; ')}`);
+      } else {
+        setError(`Failed to delete programs: ${failureMessages.join('; ')}`);
+      }
+    } else {
+      // All deletions were successful
+      setError(''); // Clear any existing errors
+    }
+    
+    // Refresh the programs list
+    await fetchPrograms();
+    setIsDeleteModalOpen(false);
+    setSelectedRows([]);
+  } catch (error) {
+    console.error('Delete error:', error);
+    setError('Failed to delete selected programs: ' + error.message);
+  } finally {
+    setDeleteInProgress(false);
+  }
+};
+
 
   const handleLogout = () => {
     onLogout();
