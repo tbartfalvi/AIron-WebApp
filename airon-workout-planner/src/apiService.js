@@ -180,7 +180,7 @@ const apiService = {
   },
   
 
-  async deleteProgram(userId, programId) {
+ async deleteProgram(userId, programId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
         method: 'DELETE',
@@ -199,8 +199,8 @@ const apiService = {
       console.error('Delete program error:', error);
       throw error;
     }
-  };
-
+  }
+};
 
 
 export default apiService;
