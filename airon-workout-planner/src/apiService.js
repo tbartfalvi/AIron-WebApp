@@ -98,7 +98,7 @@ const apiService = {
   async getPrograms(userId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedules/${userId}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
@@ -119,7 +119,7 @@ const apiService = {
   async getProgramById(userId, programId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
@@ -136,33 +136,12 @@ const apiService = {
       throw error;
     }
   },
-  
-  async deleteProgram(userId, programId) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to delete program');
-      }
-      
-      const data = await response.json();
-      return data.result;
-    } catch (error) {
-      console.error('Delete program error:', error);
-      throw error;
-    }
-  },
 
 
   async downloadProgram(userId, programId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
@@ -215,13 +194,12 @@ const apiService = {
       }
       
       const data = await response.json();
-      return data.result === "True";
+      return data.result;
     } catch (error) {
       console.error('Delete program error:', error);
       throw error;
     }
-  }
-};
+  };
 
 
 
