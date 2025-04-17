@@ -449,12 +449,13 @@ const handleDeleteProgram = async () => {
                               </TableHead>
                               <TableBody>
                                 {rows.map(row => (
-                                  <TableRow {...getRowProps({ row })} key={row.id}>
-                                    <TableSelectRow {...getSelectionProps({ row })} />
-                                    {row.cells.map(cell => (
-                                      <TableCell key={cell.id}>{cell.value}</TableCell>
-                                    ))}
-                                  </TableRow>
+                                  <WorkoutRow 
+                                    row={row}
+                                    getRowProps={getRowProps}
+                                    getSelectionProps={getSelectionProps}
+                                    handleRowSelection={handleRowSelection}
+                                    handleRowAdd={handleRowAdd}
+                                  />
                                 ))}
                               </TableBody>
                             </Table>
