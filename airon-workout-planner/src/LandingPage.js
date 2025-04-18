@@ -207,11 +207,11 @@ const handleDeleteProgram = async () => {
         if (result === "True") {
           successCount++;
         } else {
-          failureMessages.push(`Failed to delete "${row.name}"`);
+          failureMessages.push(`Failed to delete "${row.id}"`);
         }
       } catch (error) {
-        console.error(`Error deleting program ${row.name} (${row.id}):`, error);
-        failureMessages.push(`Error deleting "${row.name}": ${error.message}`);
+        console.error(`Error deleting program ${row.id}:`, error);
+        failureMessages.push(`Error deleting "${row.id}": ${error.message}`);
       }
     }
     
