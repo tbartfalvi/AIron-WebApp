@@ -153,7 +153,7 @@ const LandingPage = ({ user, onLogout }) => {
     }
   }
 
-  const handleDownloadProgram = async () => {
+  const handleDownloadProgram = async (selectedRowsFromTable) => {
     try {
       if (!selectedRowsFromTable || selectedRowsFromTable.length === 0) {
         console.log("No rows selected for download");
