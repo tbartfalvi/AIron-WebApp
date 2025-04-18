@@ -140,39 +140,36 @@ const apiService = {
 
   async downloadProgram(userId, programId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/schedule-get/${userId}/${programId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
+      // Hit the new backend endpoint that streams the CSV file
+      const response = await fetch(
+        `${API_BASE_URL}/schedule-download/${userId}/${programId}`,
+        { method: 'GET' }
+      );
+  
       if (!response.ok) {
-        throw new Error('Failed to get program');
+        throw new Error('Failed to download program');
       }
-      
-      const data = await response.json();
-      const programData = typeof data.json === 'string' ? JSON.parse(data.json) : data.json;
-      
-      // Get CSV data or create a simple default if not available
-      const csvData = data.csv || "Program Name,Exercise,Sets,Reps,Weight";
-      
-      // Create a Blob from the CSV
-      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-      
-      // Create a link element and trigger download
+  
+      // The response body *is* the CSV, so read it as a Blob
+      const blob = await response.blob();
+  
+      // Extract filename from the Content‑Disposition header, if present
+      const cdHeader  = response.headers.get('Content-Disposition') || '';
+      const matchName = cdHeader.match(/filename="?([^"]+)"?/);
+      const filename  = matchName
+        ? matchName[1]
+        : `workout_program_${new Date().toISOString().split('T')[0]}.csv`;
+  
+      // Create a temporary link to trigger the browser download
+      const url  = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      
-      // Generate filename based on program details
-      const filename = `${programData.name || 'workout_program'}_${new Date().toISOString().split('T')[0]}.csv`;
-      link.setAttribute('download', filename);
-      
-      link.style.visibility = 'hidden';
+      link.href        = url;
+      link.download    = filename;
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url);   // tidy up
     } catch (error) {
       console.error('Download program error:', error);
       throw error;
