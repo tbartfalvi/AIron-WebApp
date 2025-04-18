@@ -179,7 +179,7 @@ const apiService = {
   async deleteProgram(userId, programId) {
     try {
       const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         }
