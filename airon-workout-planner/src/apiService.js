@@ -180,7 +180,7 @@ const apiService = {
     try {
       console.log("apiService.js: calling schedule_delete api endpoint");
       const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         }
