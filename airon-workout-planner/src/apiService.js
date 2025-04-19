@@ -178,6 +178,7 @@ const apiService = {
 
   async deleteProgram(userId, programId) {
     try {
+      console.log("apiService.js: calling schedule_delete api endpoint");
       const response = await fetch(`${API_BASE_URL}/schedule-delete/${userId}/${programId}`, {
         method: 'POST',
         headers: {
@@ -186,13 +187,16 @@ const apiService = {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete program');
+        throw new Error('apiService.js: Failed to delete program');
+      }
+      else {
+        console.log("apiService.js: successfully called schedule-delete api endpoint.");
       }
       
       const data = await response.json();
       return data.result;
     } catch (error) {
-      console.error('Delete program error:', error);
+      console.error('apiService.js: Delete program error:', error);
       throw error;
     }
   },

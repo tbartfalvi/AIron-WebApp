@@ -187,7 +187,7 @@ const LandingPage = ({ user, onLogout }) => {
   };
 
 const handleDeleteProgram = async () => {
-  console.log('handleDeleteProgram called. Selected rows:', selectedRows);
+  console.log('LandingPage.js: handleDeleteProgram called. Selected rows:', selectedRows);
   try {
     setDeleteInProgress(true);
     
@@ -196,22 +196,22 @@ const handleDeleteProgram = async () => {
     let failureMessages = [];
     
     for (const row of selectedRows) {
-      console.log('Deleting program with id:', row.id);
+      console.log('LandingPage.js: Deleting program with id:', row.id);
       
       try {
         // Call the delete API with the exact ID format
         const result = await apiService.deleteProgram(user.id, row.id);
-        console.log('Delete result for program', row.id, ':', result);
+        console.log('LandingPage.js: Delete result for program', row.id, ':', result);
         
         // If the result is "True" (as a string), it was successful
         if (result === "True") {
           successCount++;
         } else {
-          failureMessages.push(`Failed to delete "${row.id}"`);
+          failureMessages.push(`LandingPage.js: Failed to delete "${row.id}"`);
         }
       } catch (error) {
-        console.error(`Error deleting program ${row.id}:`, error);
-        failureMessages.push(`Error deleting "${row.id}": ${error.message}`);
+        console.error(`LandingPage.js: Error deleting program ${row.id}:`, error);
+        failureMessages.push(`LandingPage.js: Error deleting "${row.id}": ${error.message}`);
       }
     }
     
