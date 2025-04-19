@@ -134,57 +134,57 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
             </Column>
             
             {/* Gender Selection */}
-            <Column lg={8} md={4} sm={4}>
-              <div className="button-group-section">
-                <p className="input-label">Gender:</p>
-                <ButtonSet>
-                  <Button
-                    kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('gender', 'male')}
-                    style={formData.gender === 'male' ? greenButtonStyle : {}}
-                  >
-                    Male
-                  </Button>
-                  <Button
-                    kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('gender', 'female')}
-                    style={formData.gender === 'female' ? greenButtonStyle : {}}
-                  >
-                    Female
-                  </Button>
-                </ButtonSet>
-              </div>
-            </Column>
-            
-            {/* Experience Level */}
-            <Column lg={8} md={4} sm={4}>
-              <div className="button-group-section">
-                <p className="input-label">Experience Level:</p>
-                <ButtonSet>
-                  <Button
-                    kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'beginner')}
-                    style={formData.experienceLevel === 'beginner' ? greenButtonStyle : {}}
-                  >
-                    Beginner
-                  </Button>
-                  <Button
-                    kind={formData.experienceLevel === 'intermediate' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'intermediate')}
-                    style={formData.experienceLevel === 'intermediate' ? greenButtonStyle : {}}
-                  >
-                    Intermediate
-                  </Button>
-                  <Button
-                    kind={formData.experienceLevel === 'advanced' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'advanced')}
-                    style={formData.experienceLevel === 'advanced' ? greenButtonStyle : {}}
-                  >
-                    Advanced
-                  </Button>
-                </ButtonSet>
-              </div>
-            </Column>
+<Column lg={16} md={8} sm={4}>
+  <div className="button-group-section">
+    <p className="input-label">Gender:</p>
+    <ButtonSet>
+      <Button
+        kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
+        onClick={() => handleChange('gender', 'male')}
+        style={formData.gender === 'male' ? greenButtonStyle : {}}
+      >
+        Male
+      </Button>
+      <Button
+        kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
+        onClick={() => handleChange('gender', 'female')}
+        style={formData.gender === 'female' ? greenButtonStyle : {}}
+      >
+        Female
+      </Button>
+    </ButtonSet>
+  </div>
+</Column>
+
+{/* Experience Level - Now on its own line */}
+<Column lg={16} md={8} sm={4}>
+  <div className="button-group-section">
+    <p className="input-label">Experience Level:</p>
+    <ButtonSet>
+      <Button
+        kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
+        onClick={() => handleChange('experienceLevel', 'beginner')}
+        style={formData.experienceLevel === 'beginner' ? greenButtonStyle : {}}
+      >
+        Beginner
+      </Button>
+      <Button
+        kind={formData.experienceLevel === 'intermediate' ? 'primary' : 'tertiary'}
+        onClick={() => handleChange('experienceLevel', 'intermediate')}
+        style={formData.experienceLevel === 'intermediate' ? greenButtonStyle : {}}
+      >
+        Intermediate
+      </Button>
+      <Button
+        kind={formData.experienceLevel === 'advanced' ? 'primary' : 'tertiary'}
+        onClick={() => handleChange('experienceLevel', 'advanced')}
+        style={formData.experienceLevel === 'advanced' ? greenButtonStyle : {}}
+      >
+        Advanced
+      </Button>
+    </ButtonSet>
+  </div>
+</Column>
 
             {/* Current Weight and Weight Units */}
             <Column lg={8} md={4} sm={4}>

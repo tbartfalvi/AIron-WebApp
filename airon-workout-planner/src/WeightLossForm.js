@@ -132,7 +132,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
             </Column>
             
             {/* Gender Selection */}
-            <Column lg={8} md={4} sm={4}>
+            <Column lg={16} md={8} sm={4}>
               <div className="button-group-section">
                 <p className="input-label">Gender:</p>
                 <ButtonSet>
@@ -153,9 +153,9 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 </ButtonSet>
               </div>
             </Column>
-            
-            {/* Intensity Level */}
-            <Column lg={8} md={4} sm={4}>
+
+            {/* Intensity Level - Now on its own line */}
+            <Column lg={16} md={8} sm={4}>
               <div className="button-group-section">
                 <p className="input-label">Intensity Level:</p>
                 <ButtonSet>
