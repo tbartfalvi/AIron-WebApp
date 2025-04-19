@@ -19,13 +19,14 @@ import './ProgramForms.css';
 
 const BodyBuildingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
+    programName: 'My Bodybuilding Program',
     startDate: new Date(),
     age: '',
     programWeeks: 8,
     currentWeight: '',
     weightUnit: 'lb',
     experienceLevel: 'intermediate',
-    bodyFatPercentage: '',
+    gender: 'male',
     workoutsPerWeek: 4,
     timePerWorkout: 75,
     goals: '',
@@ -67,6 +68,18 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
+            <Column lg={16} md={8} sm={4}>
+              <TextInput
+                id="programName"
+                labelText="Program Name"
+                placeholder="Enter a name for your program"
+                value={formData.programName}
+                onChange={e => handleChange('programName', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+            
             <Column lg={8} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
@@ -104,7 +117,7 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 id="programWeeks"
                 label="Program Duration (weeks)"
                 min={4}
-                max={16}
+                max={12}
                 value={formData.programWeeks}
                 onChange={e => handleChange('programWeeks', e.target.value)}
                 className="form-input"
@@ -114,33 +127,53 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
             </Column>
             
             <Column lg={16} md={8} sm={4}>
-              {/* Empty space above experience level buttons */}
-              <div style={{ marginBottom: '1.5rem' }}></div>
-              <div className="form-input">
-                <p className="input-label">Experience Level:</p>
-                <ButtonSet>
-                  <Button
-                    kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'beginner')}
-                    style={formData.experienceLevel === 'beginner' ? greenButtonStyle : {}}
-                  >
-                    Beginner
-                  </Button>
-                  <Button
-                    kind={formData.experienceLevel === 'intermediate' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'intermediate')}
-                    style={formData.experienceLevel === 'intermediate' ? greenButtonStyle : {}}
-                  >
-                    Intermediate
-                  </Button>
-                  <Button
-                    kind={formData.experienceLevel === 'advanced' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('experienceLevel', 'advanced')}
-                    style={formData.experienceLevel === 'advanced' ? greenButtonStyle : {}}
-                  >
-                    Advanced
-                  </Button>
-                </ButtonSet>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Experience Level:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'beginner')}
+                      style={formData.experienceLevel === 'beginner' ? greenButtonStyle : {}}
+                    >
+                      Beginner
+                    </Button>
+                    <Button
+                      kind={formData.experienceLevel === 'intermediate' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'intermediate')}
+                      style={formData.experienceLevel === 'intermediate' ? greenButtonStyle : {}}
+                    >
+                      Intermediate
+                    </Button>
+                    <Button
+                      kind={formData.experienceLevel === 'advanced' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'advanced')}
+                      style={formData.experienceLevel === 'advanced' ? greenButtonStyle : {}}
+                    >
+                      Advanced
+                    </Button>
+                  </ButtonSet>
+                </div>
+                
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Gender:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'male')}
+                      style={formData.gender === 'male' ? greenButtonStyle : {}}
+                    >
+                      Male
+                    </Button>
+                    <Button
+                      kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'female')}
+                      style={formData.gender === 'female' ? greenButtonStyle : {}}
+                    >
+                      Female
+                    </Button>
+                  </ButtonSet>
+                </div>
               </div>
             </Column>
 
@@ -153,19 +186,6 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
                 onChange={e => handleChange('currentWeight', e.target.value)}
                 className="form-input"
                 required
-                hideSteppers
-              />
-            </Column>
-            
-            <Column lg={8} md={4} sm={4}>
-              <NumberInput
-                id="bodyFatPercentage"
-                label="Estimated Body Fat Percentage (%)"
-                min={1}
-                max={50}
-                value={formData.bodyFatPercentage}
-                onChange={e => handleChange('bodyFatPercentage', e.target.value)}
-                className="form-input"
                 hideSteppers
               />
             </Column>

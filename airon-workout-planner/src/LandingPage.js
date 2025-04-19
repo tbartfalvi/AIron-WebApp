@@ -256,7 +256,7 @@ const handleDeleteProgram = async () => {
     try {
       setLoading(true);
       const programType = getProgramTypeEnum(currentForm);
-      const programName = `${currentForm.charAt(0).toUpperCase() + currentForm.slice(1)} Program`;
+      const programName = formData.programName || `${currentForm.charAt(0).toUpperCase() + currentForm.slice(1)} Program`;
       
       const result = await apiService.createProgram(
         user.id,

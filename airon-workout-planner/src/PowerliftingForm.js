@@ -12,17 +12,21 @@ import {
   DatePickerInput,
   RadioButtonGroup,
   RadioButton,
+  ButtonSet,
 } from '@carbon/react';
 import { ArrowRight } from '@carbon/icons-react';
 import './ProgramForms.css';
 
 const PowerliftingForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
+    programName: 'My Powerlifting Program',
     startDate: new Date(),
     age: '',
     programWeeks: 8,
     currentWeight: '',
     weightUnit: 'lb',
+    experienceLevel: 'intermediate',
+    gender: 'male',
     benchPress1RM: '',
     squat1RM: '',
     deadlift1RM: '',
@@ -50,6 +54,12 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
     e.preventDefault();
     onSubmit(formData);
   };
+  
+  // Custom style for green buttons
+  const greenButtonStyle = {
+    backgroundColor: '#0e8a00',
+    borderColor: '#0e8a00',
+  };
 
   return (
     <div className="program-form-container">
@@ -61,6 +71,18 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
+            <Column lg={16} md={8} sm={4}>
+              <TextInput
+                id="programName"
+                labelText="Program Name"
+                placeholder="Enter a name for your program"
+                value={formData.programName}
+                onChange={e => handleChange('programName', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+            
             <Column lg={8} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
@@ -98,13 +120,64 @@ const PowerliftingForm = ({ onSubmit, onCancel }) => {
                 id="programWeeks"
                 label="Program Duration (weeks)"
                 min={4}
-                max={16}
+                max={12}
                 value={formData.programWeeks}
                 onChange={e => handleChange('programWeeks', e.target.value)}
                 className="form-input"
                 required
                 hideSteppers
               />
+            </Column>
+            
+            <Column lg={16} md={8} sm={4}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Experience Level:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'beginner')}
+                      style={formData.experienceLevel === 'beginner' ? greenButtonStyle : {}}
+                    >
+                      Beginner
+                    </Button>
+                    <Button
+                      kind={formData.experienceLevel === 'intermediate' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'intermediate')}
+                      style={formData.experienceLevel === 'intermediate' ? greenButtonStyle : {}}
+                    >
+                      Intermediate
+                    </Button>
+                    <Button
+                      kind={formData.experienceLevel === 'advanced' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('experienceLevel', 'advanced')}
+                      style={formData.experienceLevel === 'advanced' ? greenButtonStyle : {}}
+                    >
+                      Advanced
+                    </Button>
+                  </ButtonSet>
+                </div>
+                
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Gender:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'male')}
+                      style={formData.gender === 'male' ? greenButtonStyle : {}}
+                    >
+                      Male
+                    </Button>
+                    <Button
+                      kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'female')}
+                      style={formData.gender === 'female' ? greenButtonStyle : {}}
+                    >
+                      Female
+                    </Button>
+                  </ButtonSet>
+                </div>
+              </div>
             </Column>
 
             <Column lg={8} md={4} sm={4}>

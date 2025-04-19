@@ -19,6 +19,7 @@ import './ProgramForms.css';
 
 const WeightLossForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
+    programName: 'My Weight Loss Program',
     startDate: new Date(),
     age: '',
     programWeeks: 8,
@@ -26,6 +27,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
     targetWeight: '',
     weightUnit: 'lb',
     intensityLevel: 'intermediate',
+    gender: 'male',
     workoutsPerWeek: 3,
     timePerWorkout: 60,
     goals: '',
@@ -67,6 +69,18 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
+            <Column lg={16} md={8} sm={4}>
+              <TextInput
+                id="programName"
+                labelText="Program Name"
+                placeholder="Enter a name for your program"
+                value={formData.programName}
+                onChange={e => handleChange('programName', e.target.value)}
+                className="form-input"
+                required
+              />
+            </Column>
+            
             <Column lg={8} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
@@ -104,7 +118,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 id="programWeeks"
                 label="Program Duration (weeks)"
                 min={4}
-                max={16}
+                max={12}
                 value={formData.programWeeks}
                 onChange={e => handleChange('programWeeks', e.target.value)}
                 className="form-input"
@@ -114,33 +128,53 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
             </Column>
             
             <Column lg={16} md={8} sm={4}>
-              {/* Empty space above intensity buttons */}
-              <div style={{ marginBottom: '1.5rem' }}></div>
-              <div className="form-input">
-                <p className="input-label">Intensity Level:</p>
-                <ButtonSet>
-                  <Button
-                    kind={formData.intensityLevel === 'easy' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('intensityLevel', 'easy')}
-                    style={formData.intensityLevel === 'easy' ? greenButtonStyle : {}}
-                  >
-                    Easy
-                  </Button>
-                  <Button
-                    kind={formData.intensityLevel === 'intermediate' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('intensityLevel', 'intermediate')}
-                    style={formData.intensityLevel === 'intermediate' ? greenButtonStyle : {}}
-                  >
-                    Intermediate
-                  </Button>
-                  <Button
-                    kind={formData.intensityLevel === 'hard' ? 'primary' : 'tertiary'}
-                    onClick={() => handleChange('intensityLevel', 'hard')}
-                    style={formData.intensityLevel === 'hard' ? greenButtonStyle : {}}
-                  >
-                    Hard
-                  </Button>
-                </ButtonSet>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Intensity Level:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.intensityLevel === 'easy' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('intensityLevel', 'easy')}
+                      style={formData.intensityLevel === 'easy' ? greenButtonStyle : {}}
+                    >
+                      Easy
+                    </Button>
+                    <Button
+                      kind={formData.intensityLevel === 'intermediate' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('intensityLevel', 'intermediate')}
+                      style={formData.intensityLevel === 'intermediate' ? greenButtonStyle : {}}
+                    >
+                      Intermediate
+                    </Button>
+                    <Button
+                      kind={formData.intensityLevel === 'hard' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('intensityLevel', 'hard')}
+                      style={formData.intensityLevel === 'hard' ? greenButtonStyle : {}}
+                    >
+                      Hard
+                    </Button>
+                  </ButtonSet>
+                </div>
+                
+                <div className="form-input" style={{ width: '48%' }}>
+                  <p className="input-label">Gender:</p>
+                  <ButtonSet>
+                    <Button
+                      kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'male')}
+                      style={formData.gender === 'male' ? greenButtonStyle : {}}
+                    >
+                      Male
+                    </Button>
+                    <Button
+                      kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
+                      onClick={() => handleChange('gender', 'female')}
+                      style={formData.gender === 'female' ? greenButtonStyle : {}}
+                    >
+                      Female
+                    </Button>
+                  </ButtonSet>
+                </div>
               </div>
             </Column>
 
