@@ -69,7 +69,8 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
-            <Column lg={16} md={8} sm={4}>
+            {/* Program Name - Full Width */}
+            <Column lg={16} md={8} sm={4} className="form-column-center">
               <TextInput
                 id="programName"
                 labelText="Program Name"
@@ -81,7 +82,8 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
             
-            <Column lg={8} md={4} sm={4}>
+            {/* 3 Column Layout for Date, Age, Duration */}
+            <Column lg={5} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
                 dateFormat="m/d/Y"
@@ -90,7 +92,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               >
                 <DatePickerInput
                   id="startDate"
-                  labelText="What date do you want to start the Program?"
+                  labelText="Start Date"
                   placeholder="mm/dd/yyyy"
                   size="md"
                   className="form-input"
@@ -99,7 +101,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               </DatePicker>
             </Column>
             
-            <Column lg={8} md={4} sm={4}>
+            <Column lg={5} md={4} sm={4}>
               <NumberInput
                 id="age"
                 label="Age"
@@ -113,7 +115,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
-            <Column lg={8} md={4} sm={4}>
+            <Column lg={6} md={4} sm={4}>
               <NumberInput
                 id="programWeeks"
                 label="Program Duration (weeks)"
@@ -127,57 +129,60 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
             
-            <Column lg={16} md={8} sm={4}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div className="form-input" style={{ width: '48%' }}>
-                  <p className="input-label">Intensity Level:</p>
-                  <ButtonSet>
-                    <Button
-                      kind={formData.intensityLevel === 'easy' ? 'primary' : 'tertiary'}
-                      onClick={() => handleChange('intensityLevel', 'easy')}
-                      style={formData.intensityLevel === 'easy' ? greenButtonStyle : {}}
-                    >
-                      Easy
-                    </Button>
-                    <Button
-                      kind={formData.intensityLevel === 'intermediate' ? 'primary' : 'tertiary'}
-                      onClick={() => handleChange('intensityLevel', 'intermediate')}
-                      style={formData.intensityLevel === 'intermediate' ? greenButtonStyle : {}}
-                    >
-                      Intermediate
-                    </Button>
-                    <Button
-                      kind={formData.intensityLevel === 'hard' ? 'primary' : 'tertiary'}
-                      onClick={() => handleChange('intensityLevel', 'hard')}
-                      style={formData.intensityLevel === 'hard' ? greenButtonStyle : {}}
-                    >
-                      Hard
-                    </Button>
-                  </ButtonSet>
-                </div>
-                
-                <div className="form-input" style={{ width: '48%' }}>
-                  <p className="input-label">Gender:</p>
-                  <ButtonSet>
-                    <Button
-                      kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
-                      onClick={() => handleChange('gender', 'male')}
-                      style={formData.gender === 'male' ? greenButtonStyle : {}}
-                    >
-                      Male
-                    </Button>
-                    <Button
-                      kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
-                      onClick={() => handleChange('gender', 'female')}
-                      style={formData.gender === 'female' ? greenButtonStyle : {}}
-                    >
-                      Female
-                    </Button>
-                  </ButtonSet>
-                </div>
+            {/* Gender Selection - Centered */}
+            <Column lg={16} md={8} sm={4} className="form-column-center">
+              <div className="form-input" style={{ maxWidth: '400px', margin: '0 auto' }}>
+                <p className="input-label">Gender:</p>
+                <ButtonSet style={{ justifyContent: 'center' }}>
+                  <Button
+                    kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
+                    onClick={() => handleChange('gender', 'male')}
+                    style={formData.gender === 'male' ? greenButtonStyle : {}}
+                  >
+                    Male
+                  </Button>
+                  <Button
+                    kind={formData.gender === 'female' ? 'primary' : 'tertiary'}
+                    onClick={() => handleChange('gender', 'female')}
+                    style={formData.gender === 'female' ? greenButtonStyle : {}}
+                  >
+                    Female
+                  </Button>
+                </ButtonSet>
+              </div>
+            </Column>
+            
+            {/* Intensity Level - Centered */}
+            <Column lg={16} md={8} sm={4} className="form-column-center">
+              <div className="form-input" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                <p className="input-label">Intensity Level:</p>
+                <ButtonSet style={{ justifyContent: 'center' }}>
+                  <Button
+                    kind={formData.intensityLevel === 'easy' ? 'primary' : 'tertiary'}
+                    onClick={() => handleChange('intensityLevel', 'easy')}
+                    style={formData.intensityLevel === 'easy' ? greenButtonStyle : {}}
+                  >
+                    Easy
+                  </Button>
+                  <Button
+                    kind={formData.intensityLevel === 'intermediate' ? 'primary' : 'tertiary'}
+                    onClick={() => handleChange('intensityLevel', 'intermediate')}
+                    style={formData.intensityLevel === 'intermediate' ? greenButtonStyle : {}}
+                  >
+                    Intermediate
+                  </Button>
+                  <Button
+                    kind={formData.intensityLevel === 'hard' ? 'primary' : 'tertiary'}
+                    onClick={() => handleChange('intensityLevel', 'hard')}
+                    style={formData.intensityLevel === 'hard' ? greenButtonStyle : {}}
+                  >
+                    Hard
+                  </Button>
+                </ButtonSet>
               </div>
             </Column>
 
+            {/* Weights - 2 Columns */}
             <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="currentWeight"
@@ -204,14 +209,16 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
-            <Column lg={8} md={4} sm={4}>
-              <div className="form-input">
-                <p className="input-label">Do you track your weights in kilograms or pounds?</p>
+            {/* Weight Unit - Centered */}
+            <Column lg={16} md={8} sm={4} className="form-column-center">
+              <div className="form-input" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                <p className="input-label">Weight Unit:</p>
                 <RadioButtonGroup
                   name="weightUnit"
                   valueSelected={formData.weightUnit}
                   onChange={value => handleChange('weightUnit', value)}
                   orientation="horizontal"
+                  style={{ justifyContent: 'center' }}
                 >
                   <RadioButton
                     id="kg"
@@ -226,7 +233,8 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
                 </RadioButtonGroup>
               </div>
             </Column>
-            <Column lg={8} md={4} sm={4}></Column>
+            
+            {/* Workout Frequency and Duration - 2 Columns */}
             <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="workoutsPerWeek"
@@ -256,7 +264,8 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
-            <Column lg={16} md={8} sm={4}>
+            {/* Goals - Full Width */}
+            <Column lg={16} md={8} sm={4} className="form-column-center">
               <TextArea
                 id="goals"
                 labelText="Goals"
@@ -268,6 +277,7 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
+            {/* Buttons - Full Width */}
             <Column lg={16} md={8} sm={4} className="form-buttons">
               <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Button

@@ -1,5 +1,3 @@
-
-
 .program-form-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -31,6 +29,8 @@
   color: #f4f4f4; /* Light text color for section titles */
   font-size: 1.25rem;
   margin-bottom: 1rem;
+  text-align: center;
+  margin-top: 0.5rem;
 }
 
 .input-label {
@@ -106,7 +106,6 @@
   color: #f4f4f4;
 }
 
-/* Add a subtle border to form elements */
 .bx--number input[type="number"],
 .bx--text-area,
 .bx--dropdown,
@@ -125,3 +124,26 @@
   row-gap: 0.5rem;
 }
 
+/* Center elements in columns with this class */
+.form-column-center .form-input {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-column-center .cds--btn-set,
+.form-column-center .bx--btn-set {
+  justify-content: center;
+  display: flex;
+}
+
+.cds--radio-button-group,
+.bx--radio-button-group {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.form-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
