@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Super Simple Frontend Builder with 4GB Swap
+# Frontend Builder with 1.5GB Swap
 LOG_FILE="/var/log/simple-frontend-build.log"
 
-echo "=== Starting simple frontend build: $(date) ===" > $LOG_FILE
+echo "=== Starting frontend build with 1.5GB swap: $(date) ===" > $LOG_FILE
 
 # Step 1: Free space and remove old swap
 apt-get clean
@@ -12,19 +12,19 @@ rm -rf /tmp/*
 swapoff -a
 rm -f /swapfile*
 
-# Step 2: Create large swap (4GB)
-echo "Creating 4GB swap file..." >> $LOG_FILE
-dd if=/dev/zero of=/swapfile-large bs=1M count=4096
-chmod 600 /swapfile-large
-mkswap /swapfile-large
-swapon /swapfile-large
+# Step 2: Create 1.5GB swap file
+echo "Creating 1.5GB swap file..." >> $LOG_FILE
+dd if=/dev/zero of=/swapfile bs=1M count=1536
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
 
 # Verify swap
 free -h >> $LOG_FILE
 
 # Step 3: Set up build environment
 cd /var/www/frontend/airon-workout-planner
-export NODE_OPTIONS="--max-old-space-size=4096"
+export NODE_OPTIONS="--max-old-space-size=1536"
 export CI=false
 export GENERATE_SOURCEMAP=false
 
