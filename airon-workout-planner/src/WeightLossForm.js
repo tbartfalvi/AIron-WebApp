@@ -69,20 +69,22 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
-            {/* Program Name - Full Width */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <TextInput
-                id="programName"
-                labelText="Program Name"
-                placeholder="Enter a name for your program"
-                value={formData.programName}
-                onChange={e => handleChange('programName', e.target.value)}
-                className="form-input"
-                required
-              />
+            {/* Program Name */}
+            <Column lg={16} md={8} sm={4}>
+              <div className="form-section">
+                <TextInput
+                  id="programName"
+                  labelText="Program Name"
+                  placeholder="Enter a name for your program"
+                  value={formData.programName}
+                  onChange={e => handleChange('programName', e.target.value)}
+                  className="form-input"
+                  required
+                />
+              </div>
             </Column>
             
-            {/* 3 Column Layout for Date, Age, Duration */}
+            {/* Basic Info - 3 Column Layout */}
             <Column lg={5} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
@@ -129,11 +131,11 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
             
-            {/* Gender Selection - Centered */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <div className="form-input" style={{ maxWidth: '400px', margin: '0 auto' }}>
+            {/* Gender Selection */}
+            <Column lg={8} md={4} sm={4}>
+              <div className="button-group-section">
                 <p className="input-label">Gender:</p>
-                <ButtonSet style={{ justifyContent: 'center' }}>
+                <ButtonSet>
                   <Button
                     kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
                     onClick={() => handleChange('gender', 'male')}
@@ -152,11 +154,11 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               </div>
             </Column>
             
-            {/* Intensity Level - Centered */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <div className="form-input" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            {/* Intensity Level */}
+            <Column lg={8} md={4} sm={4}>
+              <div className="button-group-section">
                 <p className="input-label">Intensity Level:</p>
-                <ButtonSet style={{ justifyContent: 'center' }}>
+                <ButtonSet>
                   <Button
                     kind={formData.intensityLevel === 'easy' ? 'primary' : 'tertiary'}
                     onClick={() => handleChange('intensityLevel', 'easy')}
@@ -209,16 +211,15 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
-            {/* Weight Unit - Centered */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <div className="form-input" style={{ maxWidth: '500px', margin: '0 auto' }}>
+            {/* Weight Unit */}
+            <Column lg={16} md={8} sm={4}>
+              <div className="form-section">
                 <p className="input-label">Weight Unit:</p>
                 <RadioButtonGroup
                   name="weightUnit"
                   valueSelected={formData.weightUnit}
                   onChange={value => handleChange('weightUnit', value)}
                   orientation="horizontal"
-                  style={{ justifyContent: 'center' }}
                 >
                   <RadioButton
                     id="kg"
@@ -265,16 +266,18 @@ const WeightLossForm = ({ onSubmit, onCancel }) => {
             </Column>
 
             {/* Goals - Full Width */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <TextArea
-                id="goals"
-                labelText="Goals"
-                placeholder="Describe your weight loss goals (e.g., 'Lose 20 pounds for summer', 'Fit into my old clothes', etc.)"
-                rows={4}
-                value={formData.goals}
-                onChange={e => handleChange('goals', e.target.value)}
-                className="form-input"
-              />
+            <Column lg={16} md={8} sm={4}>
+              <div className="form-section">
+                <TextArea
+                  id="goals"
+                  labelText="Goals"
+                  placeholder="Describe your weight loss goals (e.g., 'Lose 20 pounds for summer', 'Fit into my old clothes', etc.)"
+                  rows={4}
+                  value={formData.goals}
+                  onChange={e => handleChange('goals', e.target.value)}
+                  className="form-input"
+                />
+              </div>
             </Column>
 
             {/* Buttons - Full Width */}

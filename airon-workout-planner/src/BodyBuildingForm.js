@@ -68,20 +68,22 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
 
         <Form onSubmit={handleSubmit}>
           <Grid>
-            {/* Program Name - Full Width */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <TextInput
-                id="programName"
-                labelText="Program Name"
-                placeholder="Enter a name for your program"
-                value={formData.programName}
-                onChange={e => handleChange('programName', e.target.value)}
-                className="form-input"
-                required
-              />
+            {/* Program Name */}
+            <Column lg={16} md={8} sm={4}>
+              <div className="form-section">
+                <TextInput
+                  id="programName"
+                  labelText="Program Name"
+                  placeholder="Enter a name for your program"
+                  value={formData.programName}
+                  onChange={e => handleChange('programName', e.target.value)}
+                  className="form-input"
+                  required
+                />
+              </div>
             </Column>
             
-            {/* 3 Column Layout for Date, Age, Duration */}
+            {/* Basic Info - 3 Column Layout */}
             <Column lg={5} md={4} sm={4}>
               <DatePicker
                 datePickerType="single"
@@ -128,11 +130,11 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
             
-            {/* Gender Selection - Centered */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <div className="form-input" style={{ maxWidth: '400px', margin: '0 auto' }}>
+            {/* Gender Selection */}
+            <Column lg={8} md={4} sm={4}>
+              <div className="button-group-section">
                 <p className="input-label">Gender:</p>
-                <ButtonSet style={{ justifyContent: 'center' }}>
+                <ButtonSet>
                   <Button
                     kind={formData.gender === 'male' ? 'primary' : 'tertiary'}
                     onClick={() => handleChange('gender', 'male')}
@@ -151,11 +153,11 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               </div>
             </Column>
             
-            {/* Experience Level - Centered */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <div className="form-input" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            {/* Experience Level */}
+            <Column lg={8} md={4} sm={4}>
+              <div className="button-group-section">
                 <p className="input-label">Experience Level:</p>
-                <ButtonSet style={{ justifyContent: 'center' }}>
+                <ButtonSet>
                   <Button
                     kind={formData.experienceLevel === 'beginner' ? 'primary' : 'tertiary'}
                     onClick={() => handleChange('experienceLevel', 'beginner')}
@@ -181,7 +183,7 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               </div>
             </Column>
 
-            {/* Current Weight and Weight Units - 2 Columns */}
+            {/* Current Weight and Weight Units */}
             <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="currentWeight"
@@ -218,7 +220,7 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               </div>
             </Column>
             
-            {/* Workout Frequency and Duration - 2 Columns */}
+            {/* Workout Frequency and Duration */}
             <Column lg={8} md={4} sm={4}>
               <NumberInput
                 id="workoutsPerWeek"
@@ -248,20 +250,22 @@ const BodyBuildingForm = ({ onSubmit, onCancel }) => {
               />
             </Column>
 
-            {/* Goals - Full Width */}
-            <Column lg={16} md={8} sm={4} className="form-column-center">
-              <TextArea
-                id="goals"
-                labelText="Goals"
-                placeholder="Describe your bodybuilding goals (e.g., 'Increase arm size', 'Improve chest definition', 'Prepare for competition')"
-                rows={4}
-                value={formData.goals}
-                onChange={e => handleChange('goals', e.target.value)}
-                className="form-input"
-              />
+            {/* Goals */}
+            <Column lg={16} md={8} sm={4}>
+              <div className="form-section">
+                <TextArea
+                  id="goals"
+                  labelText="Goals"
+                  placeholder="Describe your bodybuilding goals (e.g., 'Increase arm size', 'Improve chest definition', 'Prepare for competition')"
+                  rows={4}
+                  value={formData.goals}
+                  onChange={e => handleChange('goals', e.target.value)}
+                  className="form-input"
+                />
+              </div>
             </Column>
             
-            {/* Buttons - Full Width */}
+            {/* Buttons */}
             <Column lg={16} md={8} sm={4} className="form-buttons">
               <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Button

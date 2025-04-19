@@ -5,7 +5,7 @@
 }
 
 .program-form-tile {
-  background-color: #262626; /* Dark background for the tile */
+  background-color: #262626;
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -15,30 +15,34 @@
   font-size: 1.75rem;
   font-weight: 400;
   margin-bottom: 0.75rem;
-  color: #f4f4f4; /* Light text color for title */
+  color: #f4f4f4;
 }
 
 .form-description {
   font-size: 1rem;
-  color: #c6c6c6; /* Light gray for description text */
+  color: #c6c6c6;
   margin-bottom: 2rem;
   max-width: 800px;
 }
 
 .form-section-title {
-  color: #f4f4f4; /* Light text color for section titles */
+  color: #f4f4f4;
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  text-align: center;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 }
 
 .input-label {
-  color: #f4f4f4; /* Light text color for input labels */
+  color: #f4f4f4;
 }
 
 .form-input {
   margin-bottom: 1.5rem;
+}
+
+/* Section spacing */
+.form-section {
+  margin-bottom: 2rem;
 }
 
 /* Make sure form labels are visible against dark background */
@@ -55,11 +59,10 @@
 .form-buttons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 2rem;
+  margin-top: 3rem;
   width: 100%;
 }
 
-/* Style for the cancel button */
 .form-buttons .cds--btn--secondary,
 .form-buttons .bx--btn--secondary {
   background-color: #393939 !important;
@@ -73,7 +76,6 @@
   background-color: #4c4c4c !important;
 }
 
-/* Style for the create program button */
 .create-program-form-button {
   background-color: #24a148 !important;
 }
@@ -82,7 +84,6 @@
   background-color: #0e8c3a !important;
 }
 
-/* Move the icon inside the button to the right */
 .create-program-form-button svg {
   margin-left: 0.5rem;
 }
@@ -119,31 +120,18 @@
   border-color: #0e8a00 !important;
 }
 
-/* Add some breathing room between form sections */
+/* Add proper spacing between button sets */
+.selection-buttons {
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+/* Give each row some breathing room */
 .bx--grid {
-  row-gap: 0.5rem;
+  row-gap: 1rem;
 }
 
-/* Center elements in columns with this class */
-.form-column-center .form-input {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.form-column-center .cds--btn-set,
-.form-column-center .bx--btn-set {
-  justify-content: center;
-  display: flex;
-}
-
-.cds--radio-button-group,
-.bx--radio-button-group {
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.form-column-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Ensure proper spacing for ButtonSet groups */
+.button-group-section {
+  margin-bottom: 2rem;
 }
